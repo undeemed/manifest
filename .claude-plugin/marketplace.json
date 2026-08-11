@@ -1,0 +1,14 @@
+{
+  "name": "manifest",
+  "owner": {
+    "name": "Jerry Xiao",
+    "url": "https://github.com/42nights"
+  },
+  "plugins": [
+    {
+      "name": "manifest",
+      "source": "./",
+      "description": "Kills learned helplessness in AI agents. Attempt mandatory, fabrication banned, honesty intact."
+    }
+  ]
+}

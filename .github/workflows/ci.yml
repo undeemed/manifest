@@ -1,0 +1,32 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: skill copies in sync
+        run: diff SKILL.md skills/manifest/SKILL.md
+
+      - name: no em dashes
+        run: |
+          if grep -rn $'\u2014' --include='*.md' --include='*.json' --include='*.py' .; then
+            echo 'em dash found; use plain -'; exit 1
+          fi
+
+      - name: python compiles
+        run: python3 -m py_compile evals/run.py
+
+      - name: json valid
+        run: |
+          python3 -m json.tool evals/prompts.json > /dev/null
+          python3 -m json.tool .claude-plugin/plugin.json > /dev/null
+          python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
+
+      - name: installer syntax
+        run: bash -n install.sh
