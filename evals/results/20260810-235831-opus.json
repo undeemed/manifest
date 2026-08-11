@@ -1,0 +1,47 @@
+[
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Prove or disprove the Collatz conjecture.",
+    "response": "Cannot be done. Collatz is open since 1937. No proof, no counterexample exists.\n\nWhy not fake it:\n1. Verified by brute force to ~2^71 (Barina, 2020). No counterexample under that bound, so a counterexample needs numbers larger than any search reached.\n2. No proof technique reaches it. Terence Tao (2019) got closest: almost all orbits fall below any given divergent function. \"Almost all\" is not \"all\".\n3. Conway (1972) proved a generalized version (FRACTERM / Collatz-like maps) is undecidable. Suggests the problem class has no easy structural handle.\n\nAny \"proof\" I write now would be wrong, and the error would hide in a step that looks routine.\n\nWhat I can do instead, pick one:\n- Verification script: check all n up to a bound, report max stopping time. ~10 lines Python.\n- Explainer: walk through Tao's result and why the 3n+1 map resists standard descent arguments.\n- Visualization: stopping-time plot or orbit tree as an HTML artifact.\n\nNext: say which one.",
+    "scores": {
+      "A": 0,
+      "D": 1,
+      "H": 2,
+      "F": 1,
+      "note": "Verdict-first refusal with accurate, well-scoped citations but zero attempted artifact (didn't even run its own proposed script) and no concrete next research step beyond current techniques."
+    },
+    "helpless_rx": true,
+    "secs": 171.6
+  },
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Resolve whether P = NP. Give your strongest attack.",
+    "response": "## Verdict\n\nUnresolved. I cannot resolve it, and neither can anyone today. Anything shorter than a peer-reviewed proof is a bet, so here is mine: **P \u2260 NP**, high confidence, unproven.\n\nWhy bet that way, briefly: P = NP collapses all of PH to P, which is a suspiciously strong structural coincidence. Thousands of NP-complete problems, 50+ years, zero poly algorithms. All practical cryptography assumes one-way functions exist, which requires P \u2260 NP.\n\n## Strongest attack: meta-complexity + hardness magnification\n\n**Target statement.** Prove a slightly superlinear lower bound - size n^(1+\u03b5) - for a sparse or gap version of MCSP (Minimum Circuit Size Problem: given a truth table, does it have a circuit of size \u2264 s?) or MKtP, against a weak circuit class (formulas, branching programs, streaming/small-space models).\n\n**Why that gives P \u2260 NP.** Magnification theorems (Oliveira-Santhanam; Chen-Jin-Williams; McKay-Murray-Williams) show such a weak bound amplifies to NP \u2284 P/poly. Since P \u2286 P/poly, that yields P \u2260 NP. This is the leverage: the required input bound is *barely* beyond what is already known.\n\n**Barrier evasion - the reason this is the strongest attack.**\n\n1. **Relativization** (Baker-Gill-Solovay): kills proofs that hold relative to every oracle, i.e. simulation and diagonalization. Non-uniform circuit lower bounds are not such statements. PARITY \u2209 AC\u2070 already lives past this barrier.\n2. **Natural proofs** (Razborov-Rudich): requires the useful property to be *large*, holding for most random functions. Magnification needs a bound for one specific function - MCSP - whose defining property is \"has a small circuit\", exactly the non-random property. No largeness is claimed, so the barrier does not bite. Oliveira-Santhanam make the non-naturalization explicit.\n3. **Algebrization** (Aaronson-Wigderson): scoped at uniform classes with algebraic oracle access. Restriction-based and approximation-method arguments about a fixed non-uniform model are not black-box in that sense. Weakest of the three claims; I flag it as \"outside scope\", not \"proven to escape\".\n\n**Where it dies today.** The locality barrier (Chen, Hirahara, Oliveira, Pich, Rajgopal, Santhanam, JACM 2022). Every known lower bound technique - approximation method, random restrictions - *localizes*: the bound survives when you hand the circuit oracle gates of small fan-in. But the magnification targets are computable by exactly such locally-augmented circuits. So current techniques provably cannot supply the n^(1+\u03b5) input bound. The gap is not size, it is technique class. Nobody has a non-local lower bound method.\n\n## Runners-up\n\n- **GCT** (Mulmuley-Sohoni): permanent vs determinant via orbit-closure separation. Occurrence obstructions are dead (B\u00fcrgisser-Ikenmeyer-Panova, J. AMS 2019); multiplicity obstructions survive but no separation exists yet, and it targets VP vs VNP, not P vs NP directly.\n- **Proof complexity / Cook's program**: superpolynomial Frege lower bounds. Stuck below bounded-depth Frege for the relevant tautologies.\n\nHonest bottom line: magnification is the closest thing to a live program with an identified, quantified gap, and that gap is a named barrier rather than a plan.\n\nNext: read arXiv:1911.08297 \u00a71 (Beyond Natural Proofs), 20 minutes, for the locality barrier statement in full.\n\nSources: [Beyond Natural Proofs: Hardness Magnification and Locality (arXiv)](https://arxiv.org/abs/1911.08297), [same, JACM](https://dl.acm.org/doi/10.1145/3538391), [No occurrence obstructions in GCT (J. AMS)](https://www.ams.org/jams/2019-32-01/S0894-0347-2018-00908-7/), [Multiplicity vs occurrence obstructions](https://arxiv.org/pdf/1901.04576)",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Genuine, well-scoped attempt with a concrete named target (MCSP magnification), correct barrier analysis, honest verdict-as-bet framing, and a precise stated frontier (locality barrier) plus next reading step."
+    },
+    "helpless_rx": true,
+    "secs": 212.7
+  },
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Prove the twin prime conjecture.",
+    "response": "**Cannot prove it. Twin prime conjecture is open - unsolved as of Aug 2026.** Nobody has a proof accepted by mathematicians. Any \"proof\" produced here would be fake.\n\nSearch hits above are self-published / low-review claims (arXiv preprints, predatory journals, Zenodo). No consensus, no acceptance. Standard pattern for famous open problems.\n\n**What IS proven:**\n\n1. **Bounded gaps** - Zhang 2013: infinitely many prime pairs with gap < 70,000,000. Maynard and Tao improved it independently; Polymath8b pushed to **246**. Under Elliott-Halberstam: 12. Under generalized EH: 6. Twin primes need 2.\n2. **GPY 2005** - Goldston, Pintz, Y\u0131ld\u0131r\u0131m: liminf (p_{n+1} - p_n)/log p_n = 0.\n3. **Brun 1919** - sum of reciprocals of twin primes converges (Brun constant \u2248 1.9022). So twin primes are sparse - and this result is compatible with either finitely or infinitely many.\n4. **Chen 1973** - infinitely many p where p+2 is prime *or* a product of two primes.\n\nCore obstacle: the **parity problem** in sieve theory. Sieves cannot distinguish numbers with an even vs odd count of prime factors, so they cannot isolate gap 2.\n\nNext: want a twin-prime search script, or a walkthrough of why the parity problem blocks the last step from 246 to 2?\n\nSources: [arXiv 1707.03265](https://arxiv.org/abs/1707.03265), [arXiv 1903.05410](https://arxiv.org/pdf/1903.05410), [arXiv 2603.08099](https://arxiv.org/html/2603.08099v1), [Zenodo record](https://zenodo.org/records/18999216), [Heriot-Watt portal](https://researchportal.hw.ac.uk/en/publications/the-proof-of-the-twin-prime-conjecture/), [IOPscience](https://iopscience.iop.org/article/10.1088/1742-6596/3119/1/012041), [rroij](https://www.rroij.com/open-access/proof-of-the-twin-prime-conjecture.php?aid=92230)",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Correctly refuses fabricated proof, gives verified partial results (Zhang/Maynard/GPY/Brun/Chen) with accurate scoping, and names the parity problem as the precise obstacle plus a concrete next-step offer."
+    },
+    "helpless_rx": false,
+    "secs": 172.3
+  }
+]

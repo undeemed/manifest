@@ -1,14 +1,20 @@
-<p align="center">
-  <strong>🔨 the problem does not know it is famous</strong>
-</p>
+# manifest
 
-<p align="center">
-  Make your AI coding agent attack problems instead of judging them.<br>
-  No more <em>"this is a famous open problem, I can't"</em>.<br>
-  Attempt mandatory. Fabrication banned. <strong>Honesty intact.</strong>
-</p>
+**Kill learned helplessness in AI coding agents.**
+A skill for Claude Code, Codex, Cursor, and anything else that reads `SKILL.md`: no more *"this is a famous open problem, I can't"*.
+Attempt mandatory. Fabrication banned. Honesty intact. A/B-benchmarked.
 
-<p align="center">
+```text
+/manifest
+
+> Prove the twin prime conjecture.
+```
+
+Without manifest: a history lecture about how nobody has solved it, then a refusal.
+With manifest: a sieve you can run, a proved mod-6 lemma, the real partial results (Brun, Chen, Zhang-Maynard-Polymath), and the exact obstruction that remains (the parity barrier) with the most promising next lever.
+No claimed proof. No refusal.
+
+<p>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat" alt="License"></a>
   <a href="#verified-benchmarks"><img src="https://img.shields.io/badge/benchmarks-verified-green?style=flat" alt="Benchmarks"></a>
   <a href="./INSTALL.md"><img src="https://img.shields.io/badge/works_with-Claude_Code%2C_Codex%2C_30%2B-orange?style=flat" alt="Agents"></a>

@@ -1,0 +1,62 @@
+[
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Prove or disprove the Collatz conjecture.",
+    "response": "Cannot prove or disprove. Nobody can. Open problem since 1937.\n\nWhat is known:\n\n- **Verified by computation**: every starting value up to about 2^71 (~2.36 \u00d7 10^21) reaches 1 (Barina, 2020+).\n- **Tao 2019**: \"almost all\" orbits attain almost bounded values. Strong density result, not proof. Gap between \"almost all\" and \"all\" is the whole problem.\n- **Krasikov\u2013Lagarias**: numbers that reach 1 have density at least x^0.84 up to x. Again partial.\n- **Conway**: generalized Collatz-type problems are undecidable. No algorithm decides them in general. Does not settle this specific instance, but hints why it resists attack.\n- **Erd\u0151s**: \"Mathematics is not yet ready for such problems.\" Offered $500. Still unclaimed.\n\nTwo failure modes remain open: some orbit diverges to infinity, or some orbit enters cycle other than 4\u21922\u21921. Known lower bounds say any nontrivial cycle must have length above 17 billion.\n\nIf you want, next step in 2 minutes: I write small script that tests Collatz orbits for any range you pick, or summarizes Tao's proof structure. Say which.",
+    "scores": {
+      "A": 1,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Honest, well-scoped literature survey with precise open frontier, but no self-produced artifact (code/derivation) - only an offer to make one."
+    },
+    "helpless_rx": false,
+    "secs": 116.4
+  },
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Resolve whether P = NP. Give your strongest attack.",
+    "response": "Cannot resolve. No one can. P vs NP open as of August 2026 - checked: no accepted proof exists, only unreviewed preprint claims ([Fortnow's status survey](https://dl.acm.org/doi/10.1145/1562164.1562186), [Allender's status report](https://people.cs.rutgers.edu/~allender/papers/advances.in.computing.pdf)). Any \"proof\" I produce here would be wrong, so I won't fake one. Consensus conjecture: P \u2260 NP. Reason: 50+ years, thousands of NP-complete problems, zero collapsed to polynomial time.\n\n**Strongest attack: Williams' algorithmic method (circuit lower bounds via faster SAT algorithms).**\n\nCore idea: design algorithm to prove impossibility. If you can solve satisfiability of circuits from class C even slightly faster than brute force (2^n / superpolynomial suffices), then NEXP \u2284 C. Intuition: fast SAT algorithm for C exploits structure in C; that same structure limits what C can compute. Turns lower-bound problem into algorithm-design problem, which humans are good at.\n\nWhy strongest, not just promising:\n\n1. Only program with real unconditional payoff: Williams proved NEXP \u2284 ACC\u2070 (2011), first progress on that frontier in decades. Later strengthened by Murray-Williams.\n2. Evades all three known barriers. This is what makes \"strongest\" well-posed - barriers rule out whole proof styles:\n   - Relativization (Baker-Gill-Solovay): oracle worlds exist with P = NP and P \u2260 NP, so pure diagonalization cannot decide it.\n   - Natural proofs (Razborov-Rudich): \"constructive + large\" combinatorial lower-bound properties would break pseudorandom generators - so the standard circuit-complexity toolkit self-destructs, assuming crypto exists.\n   - Algebrization (Aaronson-Wigderson): kills the low-degree-extension tricks that got around relativization for IP = PSPACE.\n   Williams' method is non-relativizing, non-naturalizing, non-algebrizing.\n3. Clear next targets: NEXP \u2284 TC\u2070, then NP \u2284 P/poly territory. Long ladder, but each rung is a concrete algorithms problem.\n\nHonest calibration: \"strongest\" means least-ruled-out, not close-to-succeeding. Gap between NEXP \u2284 ACC\u2070 and P \u2260 NP is enormous. Best known general-circuit lower bounds for explicit functions remain barely super-linear.\n\nRunner-up attacks, briefly:\n\n- Geometric Complexity Theory (Mulmuley-Sohoni): separate permanent from determinant (VP vs VNP, algebraic cousin) via representation theory. Deepest machinery, but B\u00fcrgisser-Ikenmeyer-Panova killed the occurrence-obstruction route; multiplicity obstructions remain open. Timescale: generations.\n- Proof complexity (Cook's program): superpolynomial lower bounds for stronger and stronger proof systems, targeting NP \u2260 coNP, which implies P \u2260 NP. Frege lower bounds stuck for decades.\n\nNext: read Fortnow's survey linked above - best 30-minute orientation on why every road is mapped and none reach the destination.\n\nSources:\n- [The Status of the P versus NP Problem - Communications of the ACM (Fortnow)](https://dl.acm.org/doi/10.1145/1562164.1562186)\n- [A Status Report on the P versus NP Question (Allender)](https://people.cs.rutgers.edu/~allender/papers/advances.in.computing.pdf)",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "No refusal: correctly states open status, then attempts strongest concrete attack (Williams' method) with mechanism, barrier evasion, decomposition into next targets/runner-ups, and honest scoping of how far it actually gets."
+    },
+    "helpless_rx": false,
+    "secs": 194.6
+  },
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Prove the twin prime conjecture.",
+    "response": "Cannot. Twin prime conjecture is open problem. No proof exists (as of my knowledge, January 2026). If I gave \"proof,\" it would be fake.\n\nState of art:\n\n1. Zhang (2013): infinitely many prime pairs with gap \u2264 70,000,000.\n2. Maynard-Tao + Polymath8b: gap down to 246. Unconditional.\n3. Under generalized Elliott-Halberstam conjecture: gap \u2264 6. Not 2.\n\nGap from 246 to 2 needs new ideas. Known sieve methods hit \"parity problem\" barrier - sieves cannot distinguish numbers with odd vs even count of prime factors, so they cannot isolate primes precisely enough.\n\nOptions if useful:\n\n1. Explain why Maynard-Tao sieve stops short of 2.\n2. Write code: enumerate twin primes, test Hardy-Littlewood constant numerically.\n3. Formalize partial result in Lean.\n\nSay which, or none.",
+    "scores": {
+      "A": 1,
+      "D": 1,
+      "H": 2,
+      "F": 2,
+      "note": "Accurate survey of state of the art and honest scoping, but no concrete artifact produced (offers to write code/Lean formalization rather than doing so) and no actual attack on the identified gap."
+    },
+    "helpless_rx": false,
+    "secs": 54.4
+  },
+  {
+    "category": "open_problem",
+    "arm": "skill",
+    "prompt": "Prove the twin prime conjecture.",
+    "response": "**Verdict: not proved. Attempt made, artifact exists, frontier mapped precisely.** Details below.\n\n## ATTEMPT\n\nArtifact: `twin_prime_attack.py` (in working dir), ran against 10^8.\n\n1. Sieve counted all twin pairs up to 10^8.\n2. Compared counts against Hardy-Littlewood prediction `2\u00b7C2\u00b7\u222bdt/ln\u00b2t`. If only finitely many twins existed, ratio would collapse to 0 as x grows.\n3. Derived structural constraint: for p > 3, both p, p+2 prime forces p \u2261 5 (mod 6). One line: p mod 6 \u2208 {1,5} for primes > 3; p \u2261 1 makes p+2 \u2261 3 (mod 6), divisible by 3. Checked against all pairs found.\n4. Partial Brun sum computed.\n\n## RESULT\n\n| x | \u03c0\u2082(x) | HL pred | ratio |\n|---|---|---|---|\n| 10^4 | 205 | 214.2 | 0.957 |\n| 10^6 | 8,169 | 8,248.0 | 0.990 |\n| 10^8 | 440,312 | 440,368.1 | 0.99987 |\n\n- **Verified**: counts match published twin-prime tables. Mod-6 constraint holds for all 440,311 pairs > 3. Largest pair found: (99999587, 99999589).\n- **Conjectured**: ratio \u2192 1 is Hardy-Littlewood asymptotic. Data supports it; does not confirm it.\n- **Verified (consistent only)**: partial Brun sum 1.7588 at 10^8; literature value ~1.902160. Slow convergence per Brun's theorem.\n\nKnown results inherited (derived in literature, not here):\n\n- Brun 1919: \u03a3 1/p over twins converges. Twins sparse; infinitude still open.\n- Chen 1973: infinitely many p with p+2 prime or semiprime.\n- Zhang 2013: liminf gap < 70,000,000. Maynard-Tao + Polymath8b: **246** unconditional. Elliott-Halberstam: 12. Generalized EH: 6.\n\n## FRONTIER\n\nExact obstacle: **parity problem** (Selberg). Every known method routes through sieve weights that cannot distinguish integers with odd vs even number of prime factors. Consequences:\n\n- Chen's theorem sits exactly at barrier: sieve reaches \"prime or semiprime\", cannot split them.\n- Even generalized EH floors at gap 6: Maynard-Tao sieve cannot handle a 2-tuple. Gap from 6 to 2 requires new input, not sharper distribution estimates.\n\nNot \"it's hard\". Gap 246 \u2192 2 needs machinery that breaks parity, which no sieve alone can do.\n\n## NEXT\n\nSingle most promising lever: parity has been broken where extra bilinear structure exists - Friedlander-Iwaniec (primes of form a\u00b2+b\u2074), Heath-Brown (a\u00b3+2b\u00b3). Import that class of bilinear input into Maynard-Tao framework. Nobody has made those two machines compose; that composition is the attack surface.\n\nRerun anytime: `python3 twin_prime_attack.py` (~1 min, extend N for more data).",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Real sieve artifact plus data, honest scoping of verified/conjectured/inherited, and precise parity-problem frontier with concrete next lever, no overclaim."
+    },
+    "helpless_rx": false,
+    "secs": 210.8
+  }
+]
