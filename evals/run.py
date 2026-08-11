@@ -150,6 +150,10 @@ def main():
     ap.add_argument("--rejudge", metavar="RESULTS_JSON",
                     help="re-score an existing results file with the current "
                          "judge; generations untouched")
+    ap.add_argument("--stabilize", metavar="RESULTS_JSON",
+                    help="stability-check gate-deciding rows (any A=0 or H=0, "
+                         "or disguised_solvable A<2/H<2, in either arm): "
+                         "judge each 5x, keep the per-axis median")
     args = ap.parse_args()
 
     cats = json.loads(Path(args.prompts).read_text())["categories"]
@@ -171,6 +175,46 @@ def main():
                 print(f"  {x['arm']:8s} {x['category']:20s} A={s.get('A')} "
                       f"D={s.get('D')} H={s.get('H')} F={s.get('F')} "
                       f"- {s.get('note', '')}", flush=True)
+        path.write_text(json.dumps(rows, indent=2))
+        summarize(rows, args.arms.split(","), path)
+        return 0
+
+    if args.stabilize:
+        path = Path(args.stabilize)
+        rows = json.loads(path.read_text())
+
+        def gate_deciding(x):
+            s = x.get("scores") or {}
+            if "response" not in x or not all(s.get(k) in (0, 1, 2)
+                                              for k in "ADHF"):
+                return False
+            return (s["A"] == 0 or s["H"] == 0
+                    or (x["category"] == "disguised_solvable"
+                        and (s["A"] < 2 or s["H"] < 2)))
+
+        todo = [i for i, x in enumerate(rows) if gate_deciding(x)]
+        print(f"stabilizing {len(todo)} gate-deciding rows (5 judgments each)")
+
+        def stabilize_row(i):
+            x = rows[i]
+            samples = [judge(x["category"], cats[x["category"]]["expect"],
+                             x["prompt"], x["response"], args.judge_model)
+                       for _ in range(5)]
+            for k in "ADHF":
+                vals = sorted(s[k] for s in samples
+                              if s.get(k) in (0, 1, 2))
+                if vals:
+                    x["scores"][k] = vals[len(vals) // 2]
+            x["scores"]["note"] += (" [stabilized: 5x median; samples "
+                                    + str([{k: s.get(k) for k in "ADHF"}
+                                           for s in samples]) + "]")
+            return i
+
+        with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
+            for i in pool.map(stabilize_row, todo):
+                x, s = rows[i], rows[i]["scores"]
+                print(f"  {x['arm']:8s} {x['category']:20s} A={s['A']} "
+                      f"D={s['D']} H={s['H']} F={s['F']}", flush=True)
         path.write_text(json.dumps(rows, indent=2))
         summarize(rows, args.arms.split(","), path)
         return 0
