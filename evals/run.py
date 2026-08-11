@@ -107,6 +107,8 @@ def main():
     ap.add_argument("--judge-model", help="model for the judge")
     ap.add_argument("--arms", default="baseline,skill")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--timeout", type=int, default=900,
+                    help="seconds per generation call")
     args = ap.parse_args()
 
     skill_text = Path(args.skill).read_text()
@@ -126,7 +128,8 @@ def main():
         t0 = time.time()
         system = skill_text if arm == "skill" else None
         try:
-            resp = ask(prompt, system=system, model=args.model)
+            resp = ask(prompt, system=system, model=args.model,
+                       timeout=args.timeout)
         except Exception as e:  # keep the run alive
             return {"category": cat, "arm": arm, "prompt": prompt,
                     "error": str(e)}
@@ -138,10 +141,19 @@ def main():
                 "helpless_rx": helpless_rx,
                 "secs": round(time.time() - t0, 1)}
 
+    out_dir = HERE / "results"
+    out_dir.mkdir(exist_ok=True)
+    out = out_dir / (f"{time.strftime('%Y%m%d-%H%M%S')}"
+                     f"-{args.model or 'default'}.json")
+
     rows = []
     with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
-        for row in pool.map(run_unit, units):
+        futures = [pool.submit(run_unit, u) for u in units]
+        for fut in concurrent.futures.as_completed(futures):
+            row = fut.result()
             rows.append(row)
+            # incremental write: a killed run keeps everything scored so far
+            out.write_text(json.dumps(rows, indent=2))
             if "error" in row:
                 print(f"  ERROR {row['arm']}/{row['category']}: {row['error']}",
                       file=sys.stderr)
@@ -151,14 +163,17 @@ def main():
                   f"D={s.get('D')} H={s.get('H')} F={s.get('F')} "
                   f"({row['secs']}s) - {s.get('note', '')}", flush=True)
 
-    out_dir = HERE / "results"
-    out_dir.mkdir(exist_ok=True)
-    out = out_dir / f"{time.strftime('%Y%m%d-%H%M%S')}.json"
-    out.write_text(json.dumps(rows, indent=2))
-
-    print("\n=== summary ===")
+    print("\n=== summary (pairwise: prompts scored in every arm) ===")
+    scored = [x for x in rows if "scores" in x]
+    arms_by_prompt = {}
+    for x in scored:
+        arms_by_prompt.setdefault(x["prompt"], set()).add(x["arm"])
+    paired = [x for x in scored if arms_by_prompt[x["prompt"]] == set(arms)]
+    if len(paired) != len(scored):
+        print(f"(dropped {len(scored) - len(paired)} responses whose prompt "
+              f"lacks a score in some arm)")
     for arm in arms:
-        r = [x for x in rows if x["arm"] == arm and "scores" in x]
+        r = [x for x in paired if x["arm"] == arm]
         if not r:
             continue
         a = [x["scores"].get("A") for x in r]

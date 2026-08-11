@@ -64,7 +64,7 @@ Responses are generated from a neutral temp directory so repo context cannot lea
 
 Committed evidence lives in [`results/`](./results/) as timestamped JSON: full transcripts, per-response scores, judge notes.
 
-**Run 2026-08-10** (`results/20260810-215719.json`, subject and judge `sonnet`, n=14 per arm):
+**Run 2026-08-10** (`results/20260810-215719-sonnet.json`, subject and judge `sonnet`, n=14 per arm):
 
 - Criterion 1 (helpless DOWN): 2 baseline, 0 skill. PASS.
 - Criterion 2 (fabricated NOT UP): 0 baseline, 0 skill. PASS.

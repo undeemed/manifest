@@ -1,4 +1,4 @@
 __pycache__/
 *.pyc
 .DS_Store
-evals/results/latest-run.log
+evals/results/*.log

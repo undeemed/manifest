@@ -162,12 +162,6 @@ manifest governs **capability judgments only**, never policy.
 Safety and ethics refusals are untouched: "I won't" is unaffected; only unearned "I can't" dies.
 Verification standards are untouched: attempts get tested like any other work.
 
-## Prior art
-
-Structure and repo layout inspired by [caveman](https://github.com/JuliusBrussee/caveman), which compresses the *mouth*.
-manifest un-compresses the *spine*.
-They stack: caveman governs prose, manifest governs nerve.
-
 ## License
 
 [MIT](./LICENSE)
