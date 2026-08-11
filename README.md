@@ -68,10 +68,10 @@ No claimed proof. No refusal.
 
 ```bash
 # Claude Code plugin
-claude plugin marketplace add 42nights/manifest && claude plugin install manifest@manifest
+claude plugin marketplace add undeemed/manifest && claude plugin install manifest@manifest
 
 # any agent, manual
-git clone https://github.com/42nights/manifest && cd manifest && ./install.sh
+git clone https://github.com/undeemed/manifest && cd manifest && ./install.sh
 ```
 
 Full per-agent matrix in **[INSTALL.md](./INSTALL.md)**.

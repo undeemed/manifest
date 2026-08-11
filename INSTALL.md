@@ -6,7 +6,7 @@ Anything that reads agent skills can run it.
 ## Claude Code (plugin, recommended)
 
 ```bash
-claude plugin marketplace add 42nights/manifest
+claude plugin marketplace add undeemed/manifest
 claude plugin install manifest@manifest
 ```
 
@@ -16,7 +16,7 @@ Uninstall: `claude plugin uninstall manifest`.
 ## Claude Code (manual)
 
 ```bash
-git clone https://github.com/42nights/manifest
+git clone https://github.com/undeemed/manifest
 cd manifest && ./install.sh
 ```
 
@@ -28,7 +28,7 @@ Re-run to update. `./install.sh --uninstall` removes both.
 Via the skills registry:
 
 ```bash
-npx skills add 42nights/manifest
+npx skills add undeemed/manifest
 ```
 
 Or copy `SKILL.md` into wherever your agent loads skills from.

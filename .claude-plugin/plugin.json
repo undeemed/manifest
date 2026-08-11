@@ -4,10 +4,10 @@
   "description": "Kills learned helplessness in AI agents. Attempt mandatory, fabrication banned, honesty intact.",
   "author": {
     "name": "Jerry Xiao",
-    "url": "https://github.com/42nights"
+    "url": "https://github.com/undeemed"
   },
-  "homepage": "https://github.com/42nights/manifest",
-  "repository": "https://github.com/42nights/manifest",
+  "homepage": "https://github.com/undeemed/manifest",
+  "repository": "https://github.com/undeemed/manifest",
   "license": "MIT",
   "keywords": ["skill", "reasoning", "helplessness", "problem-solving"]
 }
