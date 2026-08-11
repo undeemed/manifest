@@ -8,8 +8,6 @@ labels: bug
 
 **Agent + model** (e.g. Claude Code / sonnet):
 
-**Level** (lite / full / ultra):
-
 **Exact prompt given to the agent**
 
 ```

@@ -52,5 +52,4 @@ An attempt with partial results and a precise frontier = installed.
 | Action | Say |
 |---|---|
 | On | `/manifest`, "manifest mode", "actually try" |
-| Level | `/manifest lite`, `/manifest full`, `/manifest ultra` |
 | Off | "stop manifest", "normal mode" |

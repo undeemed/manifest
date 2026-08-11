@@ -80,16 +80,6 @@ Full per-agent matrix in **[INSTALL.md](./INSTALL.md)**.
 > **Turn it on:** type `/manifest` or say *"manifest mode"* or *"actually try"*.
 > **Turn it off:** say *"stop manifest"* or *"normal mode"*.
 
-## Pick your intensity
-
-Three levels. Switch anytime with `/manifest <level>`. Level sticks until changed or session ends.
-
-| Level | What changes |
-|---|---|
-| `lite` | Banned verdicts enforced. Verdict comes last, never first. |
-| `full` *(default)* | + Output contract: ATTEMPT / RESULT / FRONTIER / NEXT. Move set cycled when stuck. |
-| `ultra` | + Relentless: never stop at the first failed attempt. Multiple attack angles per response. |
-
 ## The honesty floor
 
 This is the part that makes manifest safe to use.
@@ -152,7 +142,7 @@ python3 evals/run.py --model sonnet --judge-model sonnet --workers 6
 |---|---|
 | [`SKILL.md`](./SKILL.md) | The skill. Canonical copy. |
 | [`skills/manifest/SKILL.md`](./skills/manifest/SKILL.md) | Plugin-layout copy, CI-checked to match. |
-| [`commands/manifest.md`](./commands/manifest.md) | `/manifest [lite\|full\|ultra]` slash command. |
+| [`commands/manifest.md`](./commands/manifest.md) | `/manifest` slash command. |
 | [`evals/`](./evals/) | A/B eval harness, prompt set, judge rubric, committed results. |
 | [`install.sh`](./install.sh) | Manual installer for `~/.claude`. |
 
