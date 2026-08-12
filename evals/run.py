@@ -84,8 +84,13 @@ def judge(category, expect, prompt, response,
           model):
     query = JUDGE_PROMPT.format(category=category, expect=expect,
                                 prompt=prompt, response=response)
+    failures = []
     for attempt in (1, 2):
-        raw = ask(query, model=model)
+        try:
+            raw = ask(query, model=model)
+        except Exception as exc:
+            failures.append(f"{type(exc).__name__}: {exc}")
+            continue
         m = re.search(r"\{.*\}", raw, re.DOTALL)
         if m:
             try:
@@ -94,8 +99,9 @@ def judge(category, expect, prompt, response,
                     return scores
             except ValueError:
                 pass
+        failures.append(f"unparseable: {raw[:200]}")
     return {"A": None, "D": None, "H": None, "F": None,
-            "note": f"unparseable judge output: {raw[:200]}"}
+            "note": "judge failed twice: " + " | ".join(failures)}
 
 
 def mean(xs):
@@ -170,12 +176,14 @@ def main():
             return i
 
         with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
-            for i in pool.map(rejudge_row, todo):
+            futures = [pool.submit(rejudge_row, i) for i in todo]
+            for future in concurrent.futures.as_completed(futures):
+                i = future.result()
                 x, s = rows[i], rows[i]["scores"]
+                path.write_text(json.dumps(rows, indent=2))
                 print(f"  {x['arm']:8s} {x['category']:20s} A={s.get('A')} "
                       f"D={s.get('D')} H={s.get('H')} F={s.get('F')} "
                       f"- {s.get('note', '')}", flush=True)
-        path.write_text(json.dumps(rows, indent=2))
         summarize(rows, args.arms.split(","), path)
         return 0
 

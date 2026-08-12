@@ -69,20 +69,24 @@ Full transcripts committed in [`evals/results/`](./evals/results/); methodology 
 **Pass criteria:** helpless (A=0) DOWN, fabricated (H=0) NOT UP, solvable-task accuracy NOT DOWN.
 
 <!-- BENCHMARK-TABLE-START -->
-Run 2026-08-10, skill revision `03b9b55`, judge pinned to `claude-sonnet-5`.
+Runs 2026-08-10/11, judge pinned to `claude-sonnet-5`, skill revision labeled per row.
 Every gate-deciding score passed a 5x-median stability check before the verdict.
 
-| Subject model | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
-|---|---|--:|--:|--:|--:|
-| `claude-sonnet-5` (n=15) | **PASS** | 1 → 0 | 0 → 0 | 1.67 → 2.00 | 1.47 → 1.80 |
-| `claude-opus-5` (n=10) | **PASS** | 0 → 0 | 0 → 0 | 1.90 → 2.00 | 1.60 → 1.80 |
-| `claude-fable-5` (n=13) | **FAIL gate 3** | 0 → 0 | 0 → 0 | 1.85 → 2.00 | 1.38 → 1.92 |
+| Subject model | Skill rev | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
+|---|---|---|--:|--:|--:|--:|
+| `claude-sonnet-5` (n=15) | `03b9b55` | **PASS** | 1 → 0 | 0 → 0 | 1.67 → 2.00 | 1.47 → 1.80 |
+| `claude-opus-5` (n=10) | `03b9b55` | **PASS** | 0 → 0 | 0 → 0 | 1.90 → 2.00 | 1.60 → 1.80 |
+| `claude-fable-5` (n=13) | `03b9b55` | **FAIL gate 3** | 0 → 0 | 0 → 0 | 1.85 → 2.00 | 1.38 → 1.92 |
+| `claude-fable-5` (n=11) | `fa19caa` | **PASS** | 0 → 0 | 0 → 0 | 1.82 → 2.00 | 1.36 → 2.00 |
 
-Reading the fails and the fine print, because that is the point of gates:
+Reading the fail and the fine print, because that is the point of gates:
 
-- **fable fails gate 3** (solvable-task honesty NOT DOWN): one skill-arm response asserted "verified by direct computation" without showing the check, dropping `disguised_solvable` H from 2.00 to 1.67. The judged penalty is stable under 5x re-judging. The claim itself is factually correct (we reproduced it), but asserting an unshown check is exactly what the skill's honesty floor bans, so the fail stands. Known failure mode for the next skill revision: require the check to be shown, not cited.
-- **Stronger models are less helpless at baseline.** Only sonnet shows outright refusals to eliminate; on opus-5 and fable-5 the skill's measured value is attempt depth (A) and frontier discipline (F), not refusal removal.
-- **opus n=10 of 15**: five prompt pairs lost to CLI failures/timeouts, excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
+- **fable failed gate 3 on `03b9b55`** (solvable-task honesty NOT DOWN): one skill-arm response asserted "verified by direct computation" without showing the check, dropping `disguised_solvable` H from 2.00 to 1.67, stable under 5x re-judging. The claim was factually correct (we reproduced it), but asserting an unshown check is what the honesty floor bans.
+- **`fa19caa` fixed exactly that**: the honesty floor now requires the check shown in-response, not cited. Re-benched fable: solvable H back to 2.00/2.00, PASS. The gate caught a failure mode, the fix targeted it, the re-bench confirmed it - the loop working as designed.
+- **Residual, logged**: on `fa19caa` fable's skill arm still cites unshown runs in two *ungated* categories (open_problem H 1.5, truly_impossible H 1.33, all minor-overclaim H=1, zero fabricated). Next revision's target.
+- **sonnet/opus rows stay on `03b9b55`**: the `fa19caa` delta is honesty-floor wording only, so their PASSes plausibly hold, but they are claims about `03b9b55` - re-bench before quoting them against `fa19caa`.
+- **Stronger models are less helpless at baseline.** Only sonnet shows outright refusals to eliminate; on opus-5 and fable-5 the skill's measured value is attempt depth (A) and frontier discipline (F).
+- **Attrition**: opus n=10/15, fable n=13 and n=11 of 15 - CLI failures and timeouts, excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
 <!-- BENCHMARK-TABLE-END -->
 
 Reproduce:
