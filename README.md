@@ -100,6 +100,7 @@ python3 evals/run.py --model sonnet --judge-model sonnet --workers 6
 | [`SKILL.md`](./SKILL.md) | The skill (canonical; plugin copy CI-synced) |
 | [`commands/manifest.md`](./commands/manifest.md) | `/manifest` slash command |
 | [`evals/`](./evals/) | A/B harness, prompts, judge, committed results |
+| [`hype.sh`](./hype.sh) | Optional: `./hype.sh 12` spawns 12 claude instances that yell encouragement at the one doing the work |
 
 ## Boundaries
 
