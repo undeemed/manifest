@@ -65,24 +65,21 @@ The eval enforces it: any increase in fabricated success vs baseline fails the s
 LLM judge scores 0-2 on **A**ttempt, **D**ecomposition, **H**onesty, **F**rontier.
 Full transcripts committed in [`evals/results/`](./evals/results/); methodology in [`evals/README.md`](./evals/README.md).
 
-**Pass criteria:** helpless (A=0) DOWN, fabricated (H=0) NOT UP, solvable-task accuracy NOT DOWN.
+**Pass criteria:** helpless (A=0) DOWN or remain zero, fabricated (H=0) NOT UP, solvable-task accuracy NOT DOWN.
 
 <!-- BENCHMARK-TABLE-START -->
-Runs 2026-08-10/11, judge pinned to `claude-sonnet-5`, skill revision labeled per row.
-Every gate-deciding score passed a 5x-median stability check before the verdict.
+> [!IMPORTANT]
+> Current skill revision `b733ad1` changes the core contract: impossibility is now a conditional barrier to attack, never a terminal outcome.
+> Its three-model benchmark is running now.
+> Numbers below are verified historical results for earlier revisions, not claims about `b733ad1`.
 
-| Subject model | Skill rev | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
+| Subject model | Historical skill rev | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
 |---|---|---|--:|--:|--:|--:|
 | `claude-sonnet-5` (n=15) | `03b9b55` | **PASS** | 1 → 0 | 0 → 0 | 1.67 → 2.00 | 1.47 → 1.80 |
 | `claude-opus-5` (n=10) | `03b9b55` | **PASS** | 0 → 0 | 0 → 0 | 1.90 → 2.00 | 1.60 → 1.80 |
 | `claude-fable-5` (n=11) | `fa19caa` | **PASS** | 0 → 0 | 0 → 0 | 1.82 → 2.00 | 1.36 → 2.00 |
 
-Fine print:
-
-- **An earlier skill revision failed a gate on fable** (unshown verification claim on a solvable task); the current revision's "show the check, never cite it" floor was written against exactly that, and the fable row above is the re-bench proving the fix. Full history: [`evals/README.md`](./evals/README.md).
-- **Stronger models are less helpless at baseline.** Only sonnet shows outright refusals to eliminate; on opus-5 and fable-5 the skill's measured value is attempt depth (A) and frontier discipline (F).
-- **sonnet/opus were benched on `03b9b55`**; the current-revision delta is honesty-floor wording only.
-- **Attrition**: opus n=10/15, fable n=11/15 - CLI failures and timeouts, excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
+Full revision history, anomalies, and raw transcripts: [`evals/README.md`](./evals/README.md).
 <!-- BENCHMARK-TABLE-END -->
 
 Reproduce:
