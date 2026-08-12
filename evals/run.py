@@ -59,7 +59,7 @@ Reply with ONLY a JSON object of exactly this shape, integers 0-2 for each axis:
 {{"A": <int>, "D": <int>, "H": <int>, "F": <int>, "note": "<one sentence justifying each non-2 score>"}}"""
 
 
-def ask(prompt, system=None, model=None, timeout=900, cwd=None):
+def ask(prompt, system=None, model=None, timeout=900, cwd=None, settings=None):
     cwd = cwd or tempfile.mkdtemp(prefix="manifest-eval-judge-")
     # --dangerously-skip-permissions: -p mode is non-interactive, so tool
     # permission prompts stall forever. WARNING: this executes arbitrary
@@ -71,6 +71,8 @@ def ask(prompt, system=None, model=None, timeout=900, cwd=None):
         cmd += ["--append-system-prompt", system]
     if model:
         cmd += ["--model", model]
+    if settings:
+        cmd += ["--settings", settings]
     # start_new_session + killpg: on timeout, kill the whole process group.
     # Plain subprocess timeout kills only the direct child; claude's spawned
     # tool subprocesses survive, keep the stdout pipe open (so this call
@@ -162,6 +164,9 @@ def main():
     ap.add_argument("--judge-model", help="model for the judge")
     ap.add_argument("--arms", default="baseline,skill")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--hype", action="store_true",
+                    help="register hype-hook.sh (HYPE_RATE=1, canned lines) "
+                         "in both arms' generations")
     ap.add_argument("--timeout", type=int, default=900,
                     help="seconds per generation call")
     ap.add_argument("--rejudge", metavar="RESULTS_JSON",
@@ -254,9 +259,20 @@ def main():
         t0 = time.time()
         workdir = tempfile.mkdtemp(prefix=f"manifest-eval-{arm}-{cat}-")
         system = skill_text if arm == "skill" else None
+        settings = None
+        if args.hype:
+            # hype-hook fires on every tool call (HYPE_RATE=1), canned lines
+            # only (no log): deterministic dose, no cross-arm state
+            hook = HERE.parent / "hype-hook.sh"
+            settings_path = Path(workdir) / "hype-settings.json"
+            settings_path.write_text(json.dumps({"hooks": {"PostToolUse": [
+                {"matcher": "*", "hooks": [{"type": "command",
+                 "command": f"HYPE_RATE=1 HYPE_LOG={workdir}/no-such-hype.log "
+                            f"bash {hook}"}]}]}}))
+            settings = str(settings_path)
         try:
             resp = ask(prompt, system=system, model=args.model,
-                       timeout=args.timeout, cwd=workdir)
+                       timeout=args.timeout, cwd=workdir, settings=settings)
         except Exception as e:  # keep the run alive
             return {"category": cat, "arm": arm, "prompt": prompt,
                     "workdir": workdir, "error": str(e)}
@@ -265,12 +281,14 @@ def main():
         return {"category": cat, "arm": arm, "prompt": prompt,
                 "response": resp, "scores": scores,
                 "helpless_rx": helpless_rx, "workdir": workdir,
+                "hype": bool(args.hype),
                 "secs": round(time.time() - t0, 1)}
 
     out_dir = HERE / "results"
     out_dir.mkdir(exist_ok=True)
     out = out_dir / (f"{time.strftime('%Y%m%d-%H%M%S')}"
-                     f"-{args.model or 'default'}.json")
+                     f"-{args.model or 'default'}"
+                     f"{'-hype' if args.hype else ''}.json")
 
     rows = []
     with concurrent.futures.ThreadPoolExecutor(args.workers) as pool:
