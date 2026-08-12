@@ -38,8 +38,7 @@ Per-agent matrix: [INSTALL.md](./INSTALL.md).
 Text about open problems co-occurs with refusal text, so models pattern-match the *shape* of a hard problem to the *shape* of a refusal.
 RLHF punishes wrong-confident harder than refusing, so refusal became the safe local optimum.
 
-manifest rewires the capability judgment, not the personality.
-No cheerleading; cheerleading does not change token distributions. Structure does:
+manifest floods the model with hope - a creed, an appetite for hard problems, the working hypothesis that a crack always exists - and bolts every hopeful line to a mechanism, because hope without structure is just vibes:
 
 | Root cause | Countermeasure |
 |---|---|
