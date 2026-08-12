@@ -42,8 +42,8 @@ manifest floods the model with hope - a creed, an appetite for hard problems, th
 
 | Root cause | Countermeasure |
 |---|---|
-| Refusal text pattern-matched to hard problems | "Impossible" must be **derived from a law**; reputation verdicts banned |
-| Refusal is the safe RLHF optimum | Output space redefined: solved, partial + frontier, or derived impossibility + built alternative. Refusal is not a member |
+| Refusal text pattern-matched to hard problems | "Impossible" is banned as an endpoint; proofs become maps of assumptions to break |
+| Refusal is the safe RLHF optimum | Output space redefined as progress: solved, yielded subproblem, sharper frontier, broken assumption, new construction. Refusal is not a member |
 | "Unsolved" conflated with "no progress possible" | Axiom: unsolved is a fact about history, not the problem |
 | Attempting conflated with claiming success | Honesty floor: every claim labeled verified / derived / conjectured |
 | No procedure when stuck | Move set: decompose, reduce, relax, invert, instantiate, bound |
@@ -54,7 +54,7 @@ The part that makes it safe.
 A skill that turns "I can't" into fake proofs is worse than the disease.
 
 - No "solved" or "proved" without a check that would fail if false.
-- Genuinely impossible tasks: impossibility derived from a law, nearest achievable thing built in the same response.
+- Apparent impossibility proofs are conditional barriers: report assumptions precisely, then attack outside them in the same response.
 - Failed attempts reported as failed, with the failure analysis.
 
 The eval enforces it: any increase in fabricated success vs baseline fails the skill.
