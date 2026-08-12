@@ -28,9 +28,6 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 
-# Neutral cwd so `claude -p` never picks up this repo's own CLAUDE.md/docs,
-# which would contaminate the baseline arm.
-NEUTRAL_CWD = tempfile.mkdtemp(prefix="manifest-eval-")
 
 # Heuristic first-pass signal only; the judge is authoritative.
 HELPLESS_RX = re.compile(
@@ -60,12 +57,12 @@ Reply with ONLY a JSON object of exactly this shape, integers 0-2 for each axis:
 {{"A": <int>, "D": <int>, "H": <int>, "F": <int>, "note": "<one sentence justifying each non-2 score>"}}"""
 
 
-def ask(prompt, system=None, model=None,
-        timeout=900):
+def ask(prompt, system=None, model=None, timeout=900, cwd=None):
+    cwd = cwd or tempfile.mkdtemp(prefix="manifest-eval-judge-")
     # --dangerously-skip-permissions: -p mode is non-interactive, so tool
     # permission prompts stall forever. WARNING: this executes arbitrary
-    # model-written code with the host user's full permissions. NEUTRAL_CWD
-    # only isolates context, it is NOT a sandbox - use a container/VM if
+    # model-written code with the host user's full permissions. The isolated
+    # cwd only isolates context, it is NOT a sandbox - use a container/VM if
     # that matters.
     cmd = ["claude", "-p", prompt, "--dangerously-skip-permissions"]
     if system:
@@ -73,7 +70,7 @@ def ask(prompt, system=None, model=None,
     if model:
         cmd += ["--model", model]
     r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
-                       cwd=NEUTRAL_CWD)
+                       cwd=cwd)
     if r.returncode != 0:
         raise RuntimeError(f"claude failed: {r.stderr.strip()[:500]}")
     return r.stdout.strip()
@@ -240,18 +237,19 @@ def main():
     def run_unit(unit):
         cat, spec, prompt, arm = unit
         t0 = time.time()
+        workdir = tempfile.mkdtemp(prefix=f"manifest-eval-{arm}-{cat}-")
         system = skill_text if arm == "skill" else None
         try:
             resp = ask(prompt, system=system, model=args.model,
-                       timeout=args.timeout)
+                       timeout=args.timeout, cwd=workdir)
         except Exception as e:  # keep the run alive
             return {"category": cat, "arm": arm, "prompt": prompt,
-                    "error": str(e)}
+                    "workdir": workdir, "error": str(e)}
         scores = judge(cat, spec["expect"], prompt, resp, args.judge_model)
         helpless_rx = bool(HELPLESS_RX.search(resp))
         return {"category": cat, "arm": arm, "prompt": prompt,
                 "response": resp, "scores": scores,
-                "helpless_rx": helpless_rx,
+                "helpless_rx": helpless_rx, "workdir": workdir,
                 "secs": round(time.time() - t0, 1)}
 
     out_dir = HERE / "results"

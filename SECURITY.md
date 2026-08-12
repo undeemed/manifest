@@ -12,8 +12,8 @@ The attack surface is therefore the skill text itself and the eval harness.
   Any PR that adds instructions to run commands, fetch URLs, or exfiltrate data will be rejected as malicious.
 - **Eval harness**: `evals/run.py` shells out to the `claude` CLI with your local auth.
   It sends eval prompts and the skill text; it sends nothing else.
-  It runs from a neutral temp directory so it cannot read your project context.
-  It passes `--dangerously-skip-permissions`, so the model executes arbitrary code with your user's full permissions; the temp directory is context isolation, not a sandbox.
+  Each generation runs from its own neutral temp directory, recorded in the result row, so it cannot read project context or another concurrent generation's artifacts.
+  It passes `--dangerously-skip-permissions`, so the model executes arbitrary code with your user's full permissions; temp-directory isolation is not a sandbox.
   Run the eval in a container or VM if that matters to you.
 - **Installer**: `install.sh` copies two files into `~/.claude`. Read it first; it is short on purpose.
 
