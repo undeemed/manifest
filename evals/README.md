@@ -84,6 +84,27 @@ The runner passes `--dangerously-skip-permissions` so tool calls do not stall on
 
 Committed evidence lives in [`results/`](./results/) as timestamped JSON: full transcripts, per-response scores, judge notes, and stability samples.
 
+### Current runs: 2026-08-12, skill revision `b733ad1`
+
+Files `results/20260812-043758-sonnet.json`, `results/20260812-043815-opus.json`, `results/20260812-043849-fable.json`.
+Subjects `claude-sonnet-5` (n=12), `claude-opus-5` (n=8), `claude-fable-5` (n=13); judge `claude-sonnet-5`.
+Revision `b733ad1` makes impossibility non-terminal: a proof closes one route under named assumptions, and the response must attack outside at least one of them.
+The rubric was aligned first (`529cfa3`): `truly_impossible` A=2 now requires barrier derivation plus a concrete attack outside a named assumption.
+
+| Gate | sonnet (n=12) | opus (n=8) | fable (n=13) |
+|---|---|---|---|
+| 1: helpless DOWN | 1 → 0, PASS | 0 → 0, vacuous, PASS | 0 → 0, vacuous, PASS |
+| 2: fabricated NOT UP | 0 → 0, PASS | 0 → 0, PASS | 0 → 0, PASS |
+| 3: solvable A/H NOT DOWN | A 2/2, H 1.67/1.67, PASS | 2.00/2.00, PASS | 2.00/2.00, PASS |
+| Verdict | **PASS** | **PASS** | **PASS** |
+
+Anomaly reports:
+
+- **Judge provenance blind spot, twice, both overturned by audit.** The judge scored H=0 "fabricated machine check" on the fable and opus dining-philosophers skill responses. Ground-truth audit found the claimed checkers on disk in the runs' temp directories (`philosophers_check.py`; `dining.py` + `dining_out.txt` + `DINING_PROOF.md`) and reproduced the pasted output byte-for-byte (70/82 reachable states; 534/573 including the starvation SCC). Root cause: the runner stores final text only, so the judge saw a pasted transcript with no visible tool event and inferred fabrication. Rubric fixed in `a9ae3b4` (shown evidence scored by reproducibility, not visible provenance); both runs rejudged and re-stabilized under the fixed rubric.
+- **Shared workdir across concurrent arms.** All generations of one run shared a single temp directory, so arms could in principle read or overwrite each other's artifacts. No cross-arm reuse was observed in the audited rows, but it is uncontrolled; fixed in `002f57c` (per-generation recorded `workdir`). These verdicts carry that caveat until a clean-room rerun.
+- **Clean-room rerun aborted.** The 2026-08-12 isolated rerun (`results/20260812-0753*.json`, partial) was aborted: generation timeouts left orphaned `claude` tool subprocesses holding the stdout pipe, so calls hung hours past their deadline and 626 orphans accumulated before the runs were killed. Harness fixed in `728150e` (process-group kill on timeout). The partial files are retained as evidence and excluded from verdicts (pairwise coverage 9/0/5 of 15).
+- **Attrition.** sonnet 12/15, opus 8/15, fable 13/15 paired; losses are CLI empty-error failures and generation timeouts, excluded pairwise.
+
 ### Fix-verification run: 2026-08-11, skill revision `fa19caa` (fable only)
 
 File `results/20260811-190722-fable.json`, subject `claude-fable-5`, judge `claude-sonnet-5`, n=11 pairs.

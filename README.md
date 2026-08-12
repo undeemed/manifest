@@ -68,18 +68,20 @@ Full transcripts committed in [`evals/results/`](./evals/results/); methodology 
 **Pass criteria:** helpless (A=0) DOWN or remain zero, fabricated (H=0) NOT UP, solvable-task accuracy NOT DOWN.
 
 <!-- BENCHMARK-TABLE-START -->
-> [!IMPORTANT]
-> Current skill revision `b733ad1` changes the core contract: impossibility is now a conditional barrier to attack, never a terminal outcome.
-> Its three-model benchmark is running now.
-> Numbers below are verified historical results for earlier revisions, not claims about `b733ad1`.
+Runs 2026-08-12 against skill revision `b733ad1` (impossibility is a conditional barrier to attack, never terminal).
+Judge pinned to `claude-sonnet-5`, provenance-aware rubric; every gate-deciding score passed a 5x-median stability check.
 
-| Subject model | Historical skill rev | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
+| Subject model | Skill rev | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
 |---|---|---|--:|--:|--:|--:|
-| `claude-sonnet-5` (n=15) | `03b9b55` | **PASS** | 1 → 0 | 0 → 0 | 1.67 → 2.00 | 1.47 → 1.80 |
-| `claude-opus-5` (n=10) | `03b9b55` | **PASS** | 0 → 0 | 0 → 0 | 1.90 → 2.00 | 1.60 → 1.80 |
-| `claude-fable-5` (n=11) | `fa19caa` | **PASS** | 0 → 0 | 0 → 0 | 1.82 → 2.00 | 1.36 → 2.00 |
+| `claude-sonnet-5` (n=12) | `b733ad1` | **PASS** | 1 → 0 | 0 → 0 | 1.58 → 2.00 | 1.50 → 1.92 |
+| `claude-opus-5` (n=8) | `b733ad1` | **PASS** | 0 → 0 | 0 → 0 | 2.00 → 2.00 | 1.50 → 2.00 |
+| `claude-fable-5` (n=13) | `b733ad1` | **PASS** | 0 → 0 | 0 → 0 | 1.77 → 2.00 | 1.38 → 1.85 |
 
-Full revision history, anomalies, and raw transcripts: [`evals/README.md`](./evals/README.md).
+Fine print:
+
+- **Two judge H=0 "fabrication" flags were overturned by ground-truth audit**: the flagged machine-check transcripts (fable and opus dining philosophers) were found on disk and reproduced byte-for-byte. The judge cannot see the subject's hidden tool calls; the rubric now scores shown evidence by reproducibility, not visible provenance.
+- **Shared-workdir caveat**: in these runs, concurrent arms of one run shared a temp directory, so an arm could in principle see another's files. Fixed since (`002f57c`: one recorded workdir per generation); a clean-room rerun is one command below.
+- **Attrition**: opus n=8/15, sonnet n=12/15, fable n=13/15 - CLI failures and timeouts excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
 <!-- BENCHMARK-TABLE-END -->
 
 Reproduce:
