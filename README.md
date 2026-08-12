@@ -101,6 +101,29 @@ python3 evals/run.py --model sonnet --judge-model sonnet --workers 6
 | [`commands/manifest.md`](./commands/manifest.md) | `/manifest` slash command |
 | [`evals/`](./evals/) | A/B harness, prompts, judge, committed results |
 | [`hype.sh`](./hype.sh) | Ships with the skill: `./hype.sh 12` spawns 12 claude instances (maid cafe, mommy ASMR, gym bro...) yelling encouragement at the one doing the work |
+| [`hype-hook.sh`](./hype-hook.sh) | Injects those lines INTO the working instance's context between tool calls (PostToolUse hook) |
+
+### Mid-task hype injection
+
+You cannot inject into the model's raw thinking stream (that is server-side), but a `PostToolUse` hook lands text in its context between tool calls - the closest real seam.
+E2E-verified: the working instance quotes the lines back when asked what it saw.
+
+1. Register the hook in `~/.claude/settings.json`:
+
+```json
+{"hooks": {"PostToolUse": [{"matcher": "*", "hooks": [
+  {"type": "command", "command": "bash ~/.claude/skills/manifest/hype-hook.sh"}]}]}}
+```
+
+2. Optionally keep the swarm feeding it fresh lines: `./hype.sh 12 ~/.claude/hype.log`.
+   The hook pops one unheard swarm line per firing; when the log is empty it falls back to canned lines (zero tokens, zero latency).
+3. Tune with `HYPE_RATE` (default: fires on ~1 in 4 tool calls) and `HYPE_LOG`.
+
+Mid-refactor, the working Claude sees:
+
+```text
+[hype 7/12] ganbatte, master~! the problem does not know it is famous, nya ♡
+```
 
 ## Boundaries
 
