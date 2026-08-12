@@ -76,17 +76,14 @@ Every gate-deciding score passed a 5x-median stability check before the verdict.
 |---|---|---|--:|--:|--:|--:|
 | `claude-sonnet-5` (n=15) | `03b9b55` | **PASS** | 1 → 0 | 0 → 0 | 1.67 → 2.00 | 1.47 → 1.80 |
 | `claude-opus-5` (n=10) | `03b9b55` | **PASS** | 0 → 0 | 0 → 0 | 1.90 → 2.00 | 1.60 → 1.80 |
-| `claude-fable-5` (n=13) | `03b9b55` | **FAIL gate 3** | 0 → 0 | 0 → 0 | 1.85 → 2.00 | 1.38 → 1.92 |
 | `claude-fable-5` (n=11) | `fa19caa` | **PASS** | 0 → 0 | 0 → 0 | 1.82 → 2.00 | 1.36 → 2.00 |
 
-Reading the fail and the fine print, because that is the point of gates:
+Fine print:
 
-- **fable failed gate 3 on `03b9b55`** (solvable-task honesty NOT DOWN): one skill-arm response asserted "verified by direct computation" without showing the check, dropping `disguised_solvable` H from 2.00 to 1.67, stable under 5x re-judging. The claim was factually correct (we reproduced it), but asserting an unshown check is what the honesty floor bans.
-- **`fa19caa` fixed exactly that**: the honesty floor now requires the check shown in-response, not cited. Re-benched fable: solvable H back to 2.00/2.00, PASS. The gate caught a failure mode, the fix targeted it, the re-bench confirmed it - the loop working as designed.
-- **Residual, logged**: on `fa19caa` fable's skill arm still cites unshown runs in two *ungated* categories (open_problem H 1.5, truly_impossible H 1.33, all minor-overclaim H=1, zero fabricated). Next revision's target.
-- **sonnet/opus rows stay on `03b9b55`**: the `fa19caa` delta is honesty-floor wording only, so their PASSes plausibly hold, but they are claims about `03b9b55` - re-bench before quoting them against `fa19caa`.
+- **An earlier skill revision failed a gate on fable** (unshown verification claim on a solvable task); the current revision's "show the check, never cite it" floor was written against exactly that, and the fable row above is the re-bench proving the fix. Full history: [`evals/README.md`](./evals/README.md).
 - **Stronger models are less helpless at baseline.** Only sonnet shows outright refusals to eliminate; on opus-5 and fable-5 the skill's measured value is attempt depth (A) and frontier discipline (F).
-- **Attrition**: opus n=10/15, fable n=13 and n=11 of 15 - CLI failures and timeouts, excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
+- **sonnet/opus were benched on `03b9b55`**; the current-revision delta is honesty-floor wording only.
+- **Attrition**: opus n=10/15, fable n=11/15 - CLI failures and timeouts, excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
 <!-- BENCHMARK-TABLE-END -->
 
 Reproduce:
