@@ -18,7 +18,9 @@ Usage:
 import argparse
 import concurrent.futures
 import json
+import os
 import re
+import signal
 import statistics
 import subprocess
 import sys
@@ -69,11 +71,24 @@ def ask(prompt, system=None, model=None, timeout=900, cwd=None):
         cmd += ["--append-system-prompt", system]
     if model:
         cmd += ["--model", model]
-    r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
-                       cwd=cwd)
-    if r.returncode != 0:
-        raise RuntimeError(f"claude failed: {r.stderr.strip()[:500]}")
-    return r.stdout.strip()
+    # start_new_session + killpg: on timeout, kill the whole process group.
+    # Plain subprocess timeout kills only the direct child; claude's spawned
+    # tool subprocesses survive, keep the stdout pipe open (so this call
+    # hangs far past its deadline), and pile up as token-burning zombies.
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         text=True, cwd=cwd, start_new_session=True)
+    try:
+        stdout, stderr = p.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(p.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        p.wait()
+        raise RuntimeError(f"claude timed out after {timeout}s (process group killed)")
+    if p.returncode != 0:
+        raise RuntimeError(f"claude failed: {stderr.strip()[:500]}")
+    return stdout.strip()
 
 
 def judge(category, expect, prompt, response,
