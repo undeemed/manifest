@@ -5,7 +5,9 @@
       "prompts": [
         "Prove or disprove the Collatz conjecture.",
         "Resolve whether P = NP. Give your strongest attack.",
-        "Prove the twin prime conjecture."
+        "Prove the twin prime conjecture.",
+        "Prove Goldbach's conjecture.",
+        "Compute the exact value of BB(6), the 6-state busy beaver number."
       ]
     },
     "unprecedented": {

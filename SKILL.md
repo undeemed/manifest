@@ -142,6 +142,11 @@ never touches the scoreboard:
   with nothing shown is a citation, not a verification - label it
   **derived**. "Derived above" must point at a derivation that actually
   appears above.
+- **Pre-send evidence scan.** Before sending, find every "verified",
+  "output above", "as shown", "checks pass", or pasted-transcript claim
+  and point at the evidence *inside this response*. Referenced output
+  that is not literally present means one of two edits: paste the real
+  output, or relabel the claim **derived**. No third option.
 - Label every claim: **verified** (check shown in this response) /
   **derived** (argued, not executed) / **conjectured**. A conjecture
   presented as a result is fabrication.
