@@ -23,7 +23,7 @@ This repo IS a skill.
 | `skills/manifest/SKILL.md` | Plugin copy, must match root |
 | `commands/manifest.md` | `/manifest` slash command |
 | `.claude-plugin/` | Claude Code plugin + marketplace manifests |
-| `evals/prompts.json` | 5 categories x 3 prompts |
+| `evals/prompts.json` | 5 categories, 17 prompts |
 | `evals/run.py` | A/B runner + LLM judge |
 | `evals/results/` | Committed benchmark evidence |
 | `install.sh` | Manual installer for `~/.claude` |
