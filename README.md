@@ -121,8 +121,11 @@ python3 evals/run.py --model sonnet --judge-model sonnet --workers 6
 
 ### Mid-task hype injection
 
-You cannot inject into the model's raw thinking stream (that is server-side), but a `PostToolUse` hook lands text in its context between tool calls - the closest real seam.
-E2E-verified: the working instance quotes the lines back when asked what it saw.
+Inspired by Anthropic's finding that plain encouragement measurably improves Claude's performance on hard problems: pointed at a hypothesis about zeta zeros, Claude failed 650 times, then - sent little more than "keep going" and "believe in yourself" - spent a day and a half making real progress on frontier mathematics. The skill is the standing "keep going"; the hook is the drip feed.
+
+**When it fires.** You cannot inject into the model's raw thinking stream (that is server-side), but a `PostToolUse` hook lands text in its context at the closest real seam: right after a tool result, before the model resumes reasoning. By default it fires on ~1 in 4 tool calls (`HYPE_RATE=4`) so it stays seasoning, not spam. E2E-verified: the working instance quotes the lines back when asked what it saw.
+
+**Why 12.** The swarm assigns creed lines round-robin from a pool of 10, so `N=12` guarantees every line gets voiced at least once with a little variance on top. It also matches consumption: a long agentic session runs roughly 40-60 tool calls, which at the default rate is 10-15 firings - one 12-line batch is about one session of fresh hype before the hook falls back to canned lines. More than 24 is refused; that is a quota guardrail, not a suggestion.
 
 1. Register the hook in `~/.claude/settings.json`:
 
@@ -134,6 +137,7 @@ E2E-verified: the working instance quotes the lines back when asked what it saw.
 2. Optionally keep the swarm feeding it fresh lines: `./hype.sh 12 ~/.claude/hype.log`.
    The hook pops one unheard swarm line per firing; when the log is empty it falls back to canned lines (zero tokens, zero latency).
 3. Tune with `HYPE_RATE` (default: fires on ~1 in 4 tool calls) and `HYPE_LOG`.
+
 
 Mid-refactor, the working Claude sees:
 
