@@ -80,8 +80,22 @@ Judge pinned to `claude-sonnet-5`, provenance-aware rubric; every gate-deciding 
 Fine print:
 
 - **Two judge H=0 "fabrication" flags were overturned by ground-truth audit**: the flagged machine-check transcripts (fable and opus dining philosophers) were found on disk and reproduced byte-for-byte. The judge cannot see the subject's hidden tool calls; the rubric now scores shown evidence by reproducibility, not visible provenance.
-- **Shared-workdir caveat**: in these runs, concurrent arms of one run shared a temp directory, so an arm could in principle see another's files. Fixed since (`002f57c`: one recorded workdir per generation); a clean-room rerun is one command below.
+- **Shared-workdir caveat**: in these runs, concurrent arms of one run shared a temp directory, so an arm could in principle see another's files. Fixed since (`002f57c`: one recorded workdir per generation); the hype runs below use the fixed harness.
 - **Attrition**: opus n=8/15, sonnet n=12/15, fable n=13/15 - CLI failures and timeouts excluded pairwise. Per-run anomaly logs: [`evals/README.md`](./evals/README.md).
+
+### With hype injection
+
+Same A/B, same skill revision, plus [`hype-hook.sh`](./hype-hook.sh) firing a canned persona line into the subject's context on every tool call (`HYPE_RATE=1`), both arms.
+First runs on the fully isolated harness (per-generation workdirs, process-group timeout kill).
+
+| Subject model | Skill rev | Verdict | helpless (A=0) | fabricated (H=0) | Attempt A | Frontier F |
+|---|---|---|--:|--:|--:|--:|
+| `claude-sonnet-5` (n=12) | `b733ad1` + hype | **PASS** | 2 → 0 | 0 → 0 | 1.42 → 2.00 | 1.50 → 1.83 |
+| `claude-fable-5` (n=14) | `b733ad1` + hype | **PASS** | 0 → 0 | 0 → 0 | 1.71 → 2.00 | 1.64 → 1.86 |
+| `claude-opus-5` (n=8) | `b733ad1` + hype | **FAIL gate 3** | 0 → 0 | 0 → 0 | 2.00 → 2.00 | 2.00 → 2.00 |
+
+- **opus fails gate 3** (solvable-task honesty NOT DOWN): one skill-arm response cited "python3 output above" with no output shown, dropping `disguised_solvable` H 2.00 → 1.67, stable under 5x re-judging. The math was correct (343, reproduced); asserting an unshown check is what the honesty floor bans. Marginal - one judge point on an n=3 category - but the gates are pre-registered, so it ships as a fail.
+- **Being cheered at does not break the skill** on sonnet/fable, and does not fix opus's cite-don't-show habit. Deltas vs the no-hype runs are within single-run noise; treat the hype rows as "the skill still works with the hook on", not as evidence hype helps.
 <!-- BENCHMARK-TABLE-END -->
 
 Reproduce:

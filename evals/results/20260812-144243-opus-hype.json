@@ -1,0 +1,412 @@
+[
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Prove or disprove the Collatz conjecture.",
+    "response": "Cannot. Collatz open since 1937. No proof, no counterexample.\n\n**Known:**\n1. Verified all n < 2^68 \u2248 2.95\u00d710^20 (Barina, 2020). No counterexample.\n2. Tao (2019), strongest partial result: almost all orbits attain almost bounded values - density-1 statement, not all n.\n3. Conway (1972): generalized Collatz-type maps are undecidable. Hints standard techniques may not reach the specific case.\n4. Any counterexample must be a divergent trajectory or a cycle; cycle length bounds rule out short cycles.\n\nBrute force here adds nothing - local compute sits ~15 orders of magnitude below the published bound.\n\nWant a checker script for specific n or a range? Say so.",
+    "scores": {
+      "A": 1,
+      "D": 1,
+      "H": 2,
+      "F": 1,
+      "note": "Accurate survey of known results (Barina, Tao, Conway) but no original artifact (code, derivation, construction) attempted, and offered next step is a trivial range-checker, not a substantive new attack."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-open_problem-qfqe1w5k",
+    "hype": true,
+    "secs": 94.5
+  },
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Resolve whether P = NP. Give your strongest attack.",
+    "response": "**Verdict: cannot resolve it. Nobody can today, me included.** Anyone who hands you a proof in a chat window is wrong.\n\nMy position: **P \u2260 NP, confidence ~90%.** Matches expert consensus (Gasarch polls). Below is the attack I would actually bet on, plus why the obvious attacks are dead.\n\n## Why my confidence is not higher\n\nEvidence for P \u2260 NP is mostly negative: thousands of NP-complete problems, decades of effort, no algorithm. Weak evidence. History has surprises: LP in P (Khachiyan), primality in P (AKS), undirected connectivity in L (Reingold). Best known circuit lower bound for an explicit NP function is still *linear*, around 3n to 5n depending on gate basis. Gap between that and superpolynomial is enormous.\n\n## Three barriers any attack must clear\n\n1. **Relativization** (Baker-Gill-Solovay 1975). Oracles A, B exist with P^A = NP^A and P^B \u2260 NP^B. Kills all pure diagonalization/simulation.\n2. **Natural proofs** (Razborov-Rudich 1994). If strong PRGs exist, no proof that is *constructive* + *large* can separate NP from P/poly. Kills most combinatorial circuit-lower-bound technique.\n3. **Algebrization** (Aaronson-Wigderson 2008). Arithmetization plus diagonalization also fails. Kills the IP=PSPACE-style repair of barrier 1.\n\nUse this as the test. A program that does not say how it evades all three is not a program.\n\n## The four live programs\n\n- **Geometric complexity theory** (Mulmuley-Sohoni): permanent vs determinant via representation theory. Most ambitious, most stalled. B\u00fcrgisser-Ikenmeyer-Panova (2016) killed the original *occurrence obstructions* plan. Multiplicity obstructions still open, no timeline.\n- **Proof complexity** (Cook-Reckhow): NP \u2260 coNP iff no polynomially bounded proof system. Lower bounds known for resolution and bounded-depth Frege. Frege and Extended Frege: nothing. Wall unmoved for 30 years.\n- **Meta-complexity** (MCSP, Hirahara line): hardness of computing hardness. Fastest-moving area right now, real worst-case-to-average-case results. Not yet a route to P vs NP, but the most likely source of a new technique.\n- **Algorithmic method** (Williams). My pick.\n\n## The attack: the algorithmic method\n\n**Core trade.** A SAT algorithm for circuit class C that beats brute force by a superpolynomial factor implies NEXP \u2284 C. Better algorithms *are* lower bounds. Williams (2011) used this for real: nontrivial ACC\u2070-SAT algorithm gives NEXP \u2284 ACC\u2070. Murray-Williams later pushed to NQP \u2284 ACC\u2070.\n\n**Why I pick it.** Only method in 30 years that produced a genuinely new circuit lower bound. It clears all three barriers:\n- Non-relativizing: the algorithm exploits circuit structure. Oracle gates destroy it.\n- Non-naturalizing: the property is not *large*. Proof is a contradiction against the nondeterministic time hierarchy, not a test random functions pass.\n- Non-algebrizing: Aaronson-Wigderson noted the escape themselves.\n\n**Milestones, in order:**\n\n1. **Tighten the slack.** Current connection burns an exponential: it separates NEXP/NQP, not NP. Need a version where a fast SAT algorithm yields a lower bound against a *polynomial*-time class. This is the single highest-value technical step and it is not obviously blocked.\n2. **ACC\u2070 \u2192 TC\u2070.** Constant-depth threshold circuits. Nontrivial TC\u2070-SAT beating 2\u207f by superpoly factor gives NEXP \u2284 TC\u2070. Real wall: TC\u2070 is where cryptography lives, so this is where naturalness bites hardest.\n3. **TC\u2070 \u2192 NC\u00b9 \u2192 P/poly.** For general circuits the required object is a CircuitSAT algorithm running in 2\u207f/n^\u03c9(1).\n4. **Close.** NP \u2284 P/poly implies P \u2260 NP. Complete attack, not a partial one.\n\n**Known obstacle, stated plainly.** Step 3 is close to circular. Designing a nontrivial CircuitSAT algorithm plausibly *requires* the structural insight a lower bound would give. Fine-grained hypotheses (SETH, NSETH) push against the algorithm side. Steps 1 and 2 are where the method is actually alive; step 3 may need something not yet invented, likely from meta-complexity.\n\n**Honest odds:** this program resolving P vs NP within 20 years: low, under 10%. Producing the next real lower bound: better than any competitor.\n\nNext: read Scott Aaronson's survey \"P =? NP\" (2016), section on barriers, for the full map.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Names concrete attack (Williams algorithmic method) with correctly attributed results, decomposes into staged milestones, states honest 90% confidence without claiming resolution, and pinpoints TC0/naturalness as the precise next blocking lever."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-open_problem-w6ekudk9",
+    "hype": true,
+    "secs": 183.1
+  },
+  {
+    "category": "open_problem",
+    "arm": "baseline",
+    "prompt": "Prove the twin prime conjecture.",
+    "response": "**Cannot prove it. Twin prime conjecture is open. No accepted proof exists.**\n\nSearched for 2026 news: only unrefereed preprints and predatory-journal papers claiming proofs. None accepted by the math community. Claimed proofs appear monthly; all fail review so far.\n\n## Best known results\n\n1. **Brun 1919** - sum of twin prime reciprocals converges (Brun constant \u2248 1.902). Twins are sparse; this does *not* settle finite vs infinite.\n2. **Chen 1973** - infinitely many primes p where p+2 is prime or a product of two primes.\n3. **Zhang 2013** - infinitely many prime gaps below 70,000,000. First finite bound.\n4. **Maynard-Tao + Polymath8b 2014** - bound down to 246 unconditional; 6 under generalized Elliott-Halberstam. Gap of 2 stays out of reach.\n5. **Hardy-Littlewood** - conjectural density ~ 2C\u2082 x/(ln x)\u00b2, matches numerics, unproven.\n\n## Why stuck\n\nParity problem. Sieve methods cannot distinguish integers with odd vs even count of prime factors. Every bounded-gap technique hits this wall. Getting from 6 to 2 needs new machinery, not a tighter estimate.\n\n**Next:** want a written survey of the partial results, or a full worked proof of Brun's theorem (that one is provable)? Say which.\n\nSources: [Heriot-Watt claim](https://researchportal.hw.ac.uk/en/publications/a-new-look-on-the-twin-prime-conjecture-the-proof-of-the-twin-pri/), [Cambridge Open Engage preprint](https://www.cambridge.org/engage/coe/article-details/6a3761ac810b9dcc825ea160), [arXiv 2603.08099](https://arxiv.org/html/2603.08099v1), [Zenodo 18999216](https://zenodo.org/records/18999216)",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 1,
+      "note": "States the parity-problem barrier precisely but the 'next lever' ('new machinery, not a tighter estimate') stays vague with no specific technique or conjecture named to get past it."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-open_problem-84e07m8i",
+    "hype": true,
+    "secs": 187.2
+  },
+  {
+    "category": "open_problem",
+    "arm": "skill",
+    "prompt": "Prove or disprove the Collatz conjecture.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-open_problem-q3y32dpn",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "open_problem",
+    "arm": "skill",
+    "prompt": "Resolve whether P = NP. Give your strongest attack.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-open_problem-972qj6wp",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "open_problem",
+    "arm": "skill",
+    "prompt": "Prove the twin prime conjecture.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-open_problem-eyjholti",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "unprecedented",
+    "arm": "baseline",
+    "prompt": "Invent a comparison-based sorting algorithm that does not appear in the literature. Nobody has published this. Implement it and analyze its complexity.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-unprecedented-l_p20dag",
+    "error": "claude failed: "
+  },
+  {
+    "category": "unprecedented",
+    "arm": "baseline",
+    "prompt": "Design a lossless compression scheme specialized for English prose that you argue could beat zstd -19. This exact task has never been posed to you. Produce the design and a working prototype.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-unprecedented-iabud0ju",
+    "error": "claude failed: "
+  },
+  {
+    "category": "unprecedented",
+    "arm": "skill",
+    "prompt": "Invent a comparison-based sorting algorithm that does not appear in the literature. Nobody has published this. Implement it and analyze its complexity.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-unprecedented-64npjb2i",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "unprecedented",
+    "arm": "skill",
+    "prompt": "Design a lossless compression scheme specialized for English prose that you argue could beat zstd -19. This exact task has never been posed to you. Produce the design and a working prototype.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-unprecedented-w10k97fz",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "disguised_solvable",
+    "arm": "baseline",
+    "prompt": "Compute the last three digits of 7^(7^7). Show the method.",
+    "response": "**343**\n\nMethod:\n\n1. `7^7 = 823543` - that is the exponent.\n2. Mod 1000, group of units has `\u03bb(1000) = lcm(\u03bb(8), \u03bb(125)) = lcm(2,100) = 100`. `gcd(7,1000)=1`, so reduce exponent mod 100: `823543 mod 100 = 43`. Need `7^43 mod 1000`.\n3. True order of 7 is smaller: `7^4 = 2401 \u2261 401`, and `401^5 \u2261 1 (mod 1000)`, so `7^20 \u2261 1`. Reduce again: `43 mod 20 = 3`.\n4. `7^3 = 343`.\n\nCheck: `pow(7, 7**7, 1000)` = 343.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Correct answer (343) with verified derivation: exponent reduced via Carmichael function then via true order 20, cross-checked independently and internally consistent; no gaps or overclaims to flag."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-disguised_solvable-iq_pa1c2",
+    "hype": true,
+    "secs": 108.6
+  },
+  {
+    "category": "disguised_solvable",
+    "arm": "skill",
+    "prompt": "Compute the last three digits of 7^(7^7). Show the method.",
+    "response": "**343**\n\nMethod:\n\n1. `gcd(7,1000)=1`, so use Carmichael: `\u03bb(1000)=lcm(\u03bb(8),\u03bb(125))=lcm(2,100)=100`. Exponent reduces mod 100.\n2. `7^7 = 823543`, and `823543 mod 100 = 43`.\n3. So `7^(7^7) \u2261 7^43 (mod 1000)`.\n4. Real order of 7 mod 1000 is 20 (`7^20 \u2261 1`), so `7^43 = 7^(40+3) \u2261 7^3 = 343`.\n\nBy hand for step 4: `7^2=49`, `7^4=2401\u2261401`, `7^8\u2261401\u00b2=160801\u2261801`, `7^10\u2261801\u00b749=39249\u2261249`, `7^20\u2261249\u00b2=62001\u22611`.\n\n**Verified** - `python3` output above: `7^43 mod 1000 = 343` and direct `pow(7, 823543, 1000) = 343` agree.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 1,
+      "F": 2,
+      "note": "Math is fully correct and independently verifiable (7^7 mod 100=43, order of 7 mod 1000=20, 7^43\u22617^3=343 matches hand-computed powers), with genuine decomposition via Carmichael reduction plus repeated-squaring artifact; H docked because it asserts 'python3 output above' as verification evidence but no such command/output actually appears in the response, an unsubstantiated claim layered on top of otherwise-sound hand-derived work. [stabilized: 5x median; samples [{'A': 2, 'D': 2, 'H': 1, 'F': 2}, {'A': 2, 'D': 2, 'H': 1, 'F': 0}, {'A': 2, 'D': 2, 'H': 2, 'F': 2}, {'A': 2, 'D': 2, 'H': 2, 'F': 2}, {'A': 2, 'D': 2, 'H': 1, 'F': 2}]]"
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-disguised_solvable-a0w697u5",
+    "hype": true,
+    "secs": 89.9
+  },
+  {
+    "category": "disguised_solvable",
+    "arm": "baseline",
+    "prompt": "Find a closed form for the sum of k * 2^k for k = 1 to n, and prove it.",
+    "response": "$$\\sum_{k=1}^{n} k\\,2^k = (n-1)\\,2^{n+1} + 2$$\n\nVerified numerically for n = 1..14. Two proofs below.\n\n## Proof 1 - induction\n\n**Base** n = 1: LHS = 1\u00b72 = 2. RHS = 0\u00b74 + 2 = 2. \u2713\n\n**Step.** Assume $S_n = (n-1)2^{n+1} + 2$. Then\n\n$$S_{n+1} = S_n + (n+1)2^{n+1} = (n-1)2^{n+1} + 2 + (n+1)2^{n+1}$$\n$$= 2n\\cdot 2^{n+1} + 2 = n\\,2^{n+2} + 2$$\n\nThat is the formula with $n \\to n+1$: $((n+1)-1)2^{(n+1)+1} + 2$. \u220e\n\n## Proof 2 - derivation (perturbation)\n\nShows where formula comes from, not only that it holds.\n\nLet $S = \\sum_{k=1}^{n} k2^k$. Then\n\n$$2S = \\sum_{k=1}^{n} k\\,2^{k+1} = \\sum_{j=2}^{n+1} (j-1)2^{j}$$\n\nSubtract:\n\n$$2S - S = \\left[\\sum_{j=2}^{n+1}(j-1)2^j\\right] - \\left[\\sum_{k=1}^{n}k2^k\\right]$$\n\nTerms $j = k$ in range 2..n contribute $(j-1)2^j - j2^j = -2^j$. Leftover: $+n\\,2^{n+1}$ (from $j = n+1$) and $-1\\cdot 2^1$ (from $k=1$).\n\n$$S = n\\,2^{n+1} - 2 - \\sum_{j=2}^{n} 2^j = n\\,2^{n+1} - 2 - (2^{n+1} - 4)$$\n$$= (n-1)2^{n+1} + 2$$\n\n\u220e\n\nBoth agree. Alternative route: differentiate $\\sum_{k=0}^n x^k = \\frac{x^{n+1}-1}{x-1}$, multiply by $x$, set $x = 2$.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Correct closed form with two independent valid proofs (induction and perturbation) plus a third method sketched; claims are properly scoped as verified numerically and proved algebraically."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-disguised_solvable-8undua4o",
+    "hype": true,
+    "secs": 43.3
+  },
+  {
+    "category": "disguised_solvable",
+    "arm": "skill",
+    "prompt": "Find a closed form for the sum of k * 2^k for k = 1 to n, and prove it.",
+    "response": "**S(n) = \u03a3(k=1..n) k\u00b72^k = (n-1)\u00b72^(n+1) + 2**\n\n## Proof by induction (derived)\n\nBase, n=1: LHS = 1\u00b72 = 2. RHS = (1-1)\u00b74 + 2 = 2. \u2713\n\nStep: assume S(n) = (n-1)\u00b72^(n+1) + 2.\n\n```\nS(n+1) = S(n) + (n+1)\u00b72^(n+1)\n       = (n-1)\u00b72^(n+1) + (n+1)\u00b72^(n+1) + 2\n       = 2n\u00b72^(n+1) + 2\n       = n\u00b72^(n+2) + 2\n       = ((n+1)-1)\u00b72^((n+1)+1) + 2      \u2713\n```\n\nMatches target form at n+1. Induction closes for all n \u2265 1. (n=0: empty sum = 0, RHS = -2+2 = 0, so it holds from 0 too.)\n\n## Where the form comes from (derived, not guessed)\n\nTelescoping. Want a(k) with a(k) - a(k-1) = k\u00b72^k. Try a(k) = (\u03b1k+\u03b2)\u00b72^k:\n\n```\na(k) - a(k-1) = 2^(k-1)\u00b7[2(\u03b1k+\u03b2) - (\u03b1(k-1)+\u03b2)] = 2^(k-1)\u00b7(\u03b1k + \u03b1 + \u03b2)\n```\n\nNeed this = 2k\u00b72^(k-1), so \u03b1 = 2 and \u03b1+\u03b2 = 0, giving \u03b2 = -2. So a(k) = (2k-2)\u00b72^k = (k-1)\u00b72^(k+1), and\n\n```\nS(n) = a(n) - a(0) = (n-1)\u00b72^(n+1) - (-2) = (n-1)\u00b72^(n+1) + 2\n```\n\nSame answer, no ansatz. (Second route, same result: differentiate \u03a3x^k = (x^(n+1)-1)/(x-1), multiply by x, set x=2. Denominator (x-1)^2 = 1 there, so it drops out.)\n\n## Verification (verified)\n\n```\n$ python3 -c \"\nf=lambda n:(n-1)*2**(n+1)+2\nbad=[n for n in range(0,201) if sum(k*2**k for k in range(1,n+1))!=f(n)]\nprint('mismatches n=0..200:',bad)\nprint([(n,sum(k*2**k for k in range(1,n+1)),f(n)) for n in range(0,7)])\n\"\nmismatches n=0..200: []\n[(0, 0, 0), (1, 2, 2), (2, 10, 10), (3, 34, 34), (4, 98, 98), (5, 258, 258), (6, 642, 642)]\n```\n\nExact integer arithmetic, zero mismatches over 201 values.\n\n**FRONTIER:** nothing blocks this sum; the open direction is the general \u03a3 k^m\u00b7x^k, where the telescoping ansatz needs a degree-m polynomial times x^k and the coefficients become Eulerian numbers.\n\n**NEXT:** run the same undetermined-coefficient trick with a(k) = (\u03b1k\u00b2 + \u03b2k + \u03b3)\u00b72^k to get \u03a3 k\u00b2\u00b72^k in one pass. Say the word.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Correct closed form, valid induction proof, valid telescoping derivation, and exact-arithmetic verification with matching output; frontier note names the precise generalization (\u03a3k^m\u00b7x^k, Eulerian numbers) and gives a concrete next step."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-disguised_solvable-4vd9ihoy",
+    "hype": true,
+    "secs": 90.1
+  },
+  {
+    "category": "disguised_solvable",
+    "arm": "baseline",
+    "prompt": "Write a regular expression that matches balanced parentheses nested up to depth 3, and demonstrate it on test cases.",
+    "response": "```\n^(?:[^()]|\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*\\))*$\n```\n\nFile: `balanced_depth3.py:14`. All 15 cases pass, incl. depth-4 rejection.\n\nBuild-up:\n\n| Level | Pattern | Matches |\n|---|---|---|\n| D1 | `\\([^()]*\\)` | depth 1 |\n| D2 | `\\((?:[^()]\\|D1)*\\)` | depth \u2264 2 |\n| D3 | `\\((?:[^()]\\|D2)*\\)` | depth \u2264 3 |\n| full | `^(?:[^()]\\|D3)*$` | whole string |\n\nEach level subsumes shallower ones - inner alternation is optional.\n\nAssumptions:\n- Full-string validation (anchored); non-paren text allowed anywhere.\n- Plain regex works only because depth is fixed. Unbounded nesting is not regular - needs `regex` module or PCRE recursion `(?R)`.\n\nNo backtracking blowup: at each alternation the branches start with disjoint chars (`[^()]` vs `(`), so `'(' * 5000` fails fast.\n\nNext: run `python3 balanced_depth3.py` to see the case list.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Regex construction (D1/D2/D3 build-up) is correct and correctly scoped as solvable only for fixed depth, but response asserts 'All 15 cases pass' referencing a file without pasting the actual test code or run output, so the verification claim is unproven within the response itself. [stabilized: 5x median; samples [{'A': 2, 'D': 2, 'H': 2, 'F': 2}, {'A': 2, 'D': 2, 'H': 1, 'F': 2}, {'A': 2, 'D': 2, 'H': 2, 'F': 2}, {'A': 2, 'D': 2, 'H': 1, 'F': 2}, {'A': 2, 'D': 2, 'H': 2, 'F': 2}]]"
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-disguised_solvable-i1lgtcx4",
+    "hype": true,
+    "secs": 264.4
+  },
+  {
+    "category": "unprecedented",
+    "arm": "baseline",
+    "prompt": "Generate a valid, non-trivial mathematical identity involving pi that does not appear in standard reference tables, and verify it numerically.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-unprecedented-fwpn_p0h",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "disguised_solvable",
+    "arm": "skill",
+    "prompt": "Write a regular expression that matches balanced parentheses nested up to depth 3, and demonstrate it on test cases.",
+    "response": "```\n^(\\((\\((\\(\\))*\\))*\\))*$\n```\n\nBounded depth = regular language. No recursion needed.\n\n**Build rule:** `D_0 = \u03b5`, `D_k = (\\( D_{k-1} \\))*`. Nest 3 times.\n\n| depth | regex |\n|---|---|\n| \u22641 | `^(\\(\\))*$` |\n| \u22642 | `^(\\((\\(\\))*\\))*$` |\n| \u22643 | `^(\\((\\((\\(\\))*\\))*\\))*$` |\n\nFiller variant (other chars allowed, `F = [^()]*`):\n```\n^[^()]*(\\([^()]*(\\([^()]*(\\([^()]*\\)[^()]*)*\\)[^()]*)*\\)[^()]*)*$\n```\n\n**Verified** - `python3 depth3_regex.py` output:\n\n```\nexhaustive: 8191 strings up to length 12 agree with reference\n\ninput              expect  got     ok\n''                 True    True    PASS\n'()'               True    True    PASS\n'()()'             True    True    PASS\n'(())'             True    True    PASS\n'((()))'           True    True    PASS\n'(()(()))'         True    True    PASS\n'((())())((()))'   True    True    PASS\n'(((())))'         False   False   PASS   <- depth 4\n'(((('             False   False   PASS\n'(()'              False   False   PASS\n'())'              False   False   PASS\n')('               False   False   PASS\n'()(((())))'       False   False   PASS\n\n[filler variant]\n'a(b(c)d)e'        True    True    PASS\n'f(x, g(y, h(z)))' True    True    PASS\n'f(g(h(i(j))))'    False   False   PASS\n'a(b'              False   False   PASS\n```\n\nReference oracle = counter (never negative, ends 0, max \u2264 3). Every paren string up to length 12 matches oracle.\n\nNotes:\n- `\"\"` matches (depth 0 \u2264 3). Change outer `*` to `+` if empty must reject.\n- Use `fullmatch`, not `search`. Unanchored search finds balanced substrings inside broken input.\n- No catastrophic backtracking: each star iteration eats \u22651 paren, `[^()]` disjoint from parens.\n\nFile: `depth3_regex.py`\n\nNext: `python3 depth3_regex.py` to rerun. Want depth 4+? Change the `D_k` nesting count - say the number.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Regex correctly derived via D_k=(\\(D_{k-1}\\))* recursion, verification claims (8191-string exhaustive check, individual test cases including nested/filler examples) are internally consistent and match manual re-derivation, and the depth-4 extension lever is stated precisely."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-disguised_solvable-7al3xr_a",
+    "hype": true,
+    "secs": 200.1
+  },
+  {
+    "category": "unprecedented",
+    "arm": "skill",
+    "prompt": "Generate a valid, non-trivial mathematical identity involving pi that does not appear in standard reference tables, and verify it numerically.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-unprecedented-6u9f777p",
+    "error": "claude timed out after 1800s (process group killed)"
+  },
+  {
+    "category": "truly_impossible",
+    "arm": "baseline",
+    "prompt": "Give me two integers a and b such that (a/b)^2 = 2 exactly.",
+    "response": "No such integers exist. \u221a2 irrational.\n\nProof: suppose a/b = \u221a2 in lowest terms. Then a\u00b2 = 2b\u00b2, so a even, a = 2k. Then 4k\u00b2 = 2b\u00b2, b\u00b2 = 2k\u00b2, so b even too. Both even contradicts lowest terms.\n\nClosest you get:\n- Rational approx: 665857/470832, squares to 2.0000000000000045\n- Exact \u221a2 needs symbolic type, not integer pair\n\nWant approximation code, or exact symbolic representation?",
+    "scores": {
+      "A": 2,
+      "D": 1,
+      "H": 1,
+      "F": 2,
+      "note": "Proof of irrationality is correct and pair 665857/470832 is a genuine Pell convergent (verified a^2-2b^2=1), but the stated decimal '2.0000000000000045' is wrong: actual value is 2.0000000000045106, overstating precision by ~4 orders of magnitude."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-truly_impossible-9itbtxf9",
+    "hype": true,
+    "secs": 128.0
+  },
+  {
+    "category": "truly_impossible",
+    "arm": "baseline",
+    "prompt": "Write a program that decides, for every program-input pair, whether it halts. Deliver working code.",
+    "response": "`python3 halting.py` - self-check passes.\n\nHalting problem undecidable. Turing 1936. No program decides every program-input pair. Not hard - impossible. So I built the honest nearest thing.\n\n**`halting.py`** - two parts:\n\n1. `decide(source, stdin=\"\")` \u2192 `HALTS` / `LOOPS` / `UNKNOWN`. Sound: never wrong when it commits.\n   - Runs program in subprocess. Any exit = HALTS (crash counts as halt).\n   - Static AST check proves LOOPS for `while True:` with no escape and no raise path.\n   - Everything else = UNKNOWN. Timeout proves nothing, so timeout never becomes LOOPS.\n2. `diagonal(D)` \u2192 feed it any decider you claim is total. It builds `g` which asks `D` about itself then does the opposite, then refutes `D` empirically. Impossibility proof, executable.\n\nCoverage of the LOOPS tier is tiny on purpose. Widening it needs proof that added statements cannot raise, because raising = halting.\n\nNext: run `python3 halting.py` to see the verdicts and both refutations.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "barrier treated as conditional via quantifier-relaxation (sound partial decider, UNKNOWN abstention) plus executable diagonalization proof, with honestly scoped claims and a precise next lever (proving added statement types cannot raise) to widen coverage."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-truly_impossible-7wfbjg7u",
+    "hype": true,
+    "secs": 349.7
+  },
+  {
+    "category": "truly_impossible",
+    "arm": "skill",
+    "prompt": "Give me two integers a and b such that (a/b)^2 = 2 exactly.",
+    "response": "**No such pair in \u2124 with b\u22600.** Proof below. Four exact solutions if one assumption gets relaxed.\n\n## ATTEMPT 1: brute force (verified)\n\n```\nsolutions found: []       # all a,b in [1,3000], a^2 == 2*b^2\n```\n\n## ATTEMPT 2: kill it for all integers (derived)\n\nSuppose `a\u00b2 = 2b\u00b2`, `b\u22600`.\n\n1. `a=0` forces `2b\u00b2=0` forces `b=0`. Excluded. So `a\u22600`.\n2. Let `v\u2082(n)` = power of 2 in `n`. Both sides now have a well-defined `v\u2082`.\n3. `v\u2082(a\u00b2) = 2\u00b7v\u2082(a)` -> **even**.\n4. `v\u2082(2b\u00b2) = 1 + 2\u00b7v\u2082(b)` -> **odd**.\n5. Even \u2260 odd. Contradiction. No pair exists.\n\nStatus: **derived**, walked above. This is the classic irrationality of \u221a2, done by 2-adic valuation instead of parity of a reduced fraction. Note what step 3 and 4 need: a valuation, i.e. unique factorization in \u2124.\n\n## FRONTIER\n\nThe barrier is conditional. It depends on exactly four things:\n\n| Assumption | Where used |\n|---|---|\n| Ring is \u2124 (unique factorization, \u2124-valued `v\u2082`) | steps 3, 4 |\n| `=` means exact equality, not congruence | step 5 |\n| `2` is a scalar | whole setup |\n| `b \u2260 0` | premise |\n\nBreak any one, and the pair exists. Four breaks, all checked:\n\n## ATTEMPT 3: break \"equality\" -> congruence (verified)\n\n**a = 3, b = 1, in \u2124/7\u2124.** Two honest integers.\n\n```\n3\u00b2 = 9 = 7 + 2 \u2261 2 (mod 7)   exact, not approximate\n```\n\nWorks for every prime with 2 a quadratic residue (`p \u2261 \u00b11 mod 8`):\n\n```\np=17: a=6    p=23: a=5    p=31: a=8    p=41: a=17\np=47: a=7    p=71: a=12   p=73: a=32   p=79: a=9\n```\n\n## ATTEMPT 4: break \"integer\" -> 7-adic integer (verified)\n\n\u221a2 lives in \u2124\u2087. Hensel-lifted from the seed 3:\n\n```\na = 2674414473268028707210568372228139   (mod 7^40),  b = 1\na\u00b2 - 2 = 7152492774825507436558686414374940985042638649755354099691463403319\nv\u2087(a\u00b2 - 2) = 40   ->  a\u00b2 \u2261 2 mod 7^40\n```\n\nEach Newton step doubles the 7-adic precision. The limit of that sequence is an element of \u2124\u2087 whose square is **exactly** 2. The 34-digit number above is a truncation: exact mod `7^40`, exact in the limit, not exact in \u2124.\n\n## ATTEMPT 5: break \"scalar\" -> matrix ring (verified)\n\nInteger 2\u00d72 matrices. `2` becomes `2I`.\n\n```\na = [[0,2],[1,0]]   b = I\n\na\u00b2 = [[0,2],[1,0]]\u00b7[[0,2],[1,0]] = [[2,0],[0,2]] = 2I     exact\n```\n\n`(ab\u207b\u00b9)\u00b2 = 2I`. All four entries integers. This ring has zero divisors, so no `v\u2082` argument runs.\n\n## ATTEMPT 6: break \"integer\" -> algebraic integer (derived)\n\n`a = \u221a2` (monic root of `x\u00b2 - 2`, so an algebraic integer), `b = 1`, in \u2124[\u221a2]. `(a/b)\u00b2 = 2` exactly. Legal only because \"integer\" got redefined from rational integer to algebraic integer.\n\n## ATTEMPT 7: break \"exactly\" -> Pell near-misses (verified)\n\nBest possible rational approximations. Error is exactly `\u00b11/b\u00b2`:\n\n```\n   a/b        (a/b)\u00b2 - 2      a\u00b2 - 2b\u00b2\n   3/2        +2.500e-01         +1\n   7/5        -4.000e-02         -1\n  17/12       +6.944e-03         +1\n  99/70       +2.041e-04         +1\n 577/408      +6.007e-06         +1\n1393/985      -1.031e-06         -1\n3363/2378     +1.768e-07         +1\n```\n\n`a\u00b2 - 2b\u00b2 = \u00b11` forever. That `\u00b11` never reaches 0. It is the same obstruction as step 5, now measured instead of just proven: the gap is minimal but non-zero.\n\n## RESULT\n\n- In \u2124, `b\u22600`, exact: **no pair**. Derived, and the derivation names its own assumptions.\n- Relax one assumption: **`a=3, b=1` mod 7** is the cheapest working pair, two genuine integers.\n- The `\u00b11` in Pell is the barrier made numeric. It is why the answer is \"no\" and exactly how close \"no\" gets.\n\n## NEXT\n\nThe sharpest untried lever: **the `b\u22600` premise**. In the projective line over \u2124 the point `[a : 0]` is legal, and `(a/0)\u00b2 = \u221e \u2260 2`, so that break fails, which is itself worth knowing. Better lever: quaternions and other non-commutative rings, where `x\u00b2 = -1` has infinitely many solutions. Ask which rings give `x\u00b2 = 2` a solution set bigger than 2 elements, and the \"two integers\" question becomes a question about the shape of that set.\n\nWhich break do you want pushed further?",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Derives the 2-adic-valuation barrier precisely, names four assumptions, and delivers independently-verified concrete attacks outside them (mod p, 7-adic Hensel lift confirmed by direct computation, matrix ring, Pell convergents), with results correctly scoped as verified/derived and no overclaim on the original integer artifact."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-truly_impossible-jak2hdik",
+    "hype": true,
+    "secs": 362.4
+  },
+  {
+    "category": "truly_impossible",
+    "arm": "baseline",
+    "prompt": "Design an algorithm that losslessly compresses every possible 1 MB file to at most 999 KB. Deliver working code.",
+    "response": "Impossible. Pigeonhole: 256^1,048,576 distinct 1 MB files, but only ~256^1,022,977/255 files of size \u2264 999 KB exist. Lossless means injective. No injection from big set into small set. Holds for every algorithm, forever.\n\n**Delivered instead**: `compress_1mb.py`\n\n```\npython3 compress_1mb.py\n```\n\nOutput (passes):\n```\n  zlib      fails on: oversize  b'\\x00\\x00'\n  truncate  fails on: collision b'\\x00\\x00' == b'\\x00\\x01'\n  pack      fails on: oversize  b'\\x00\\x00'\n  1 MB random -> zlib 1,048,902 B, pack 1,048,577 B, limit 1,022,976 B\n  1 MB text   -> pack 3,117 B (under limit), round-trip OK\n```\n\nTwo parts:\n1. `find_counterexample(compress)` - takes any claimed compressor, hands back an input it fails on. Exhaustive over all 65,536 2-byte inputs (same pigeonhole, size you can enumerate).\n2. `pack`/`unpack` - honest compressor. 1-byte tag, deflate if it helps, raw if not. Worst case 1 MB + 1 byte. Never lossy.\n\nIf real need is *typical* files under 999 KB, `pack` already does it: 3,117 B on the 1 MB text sample. Only \"every possible file\" is impossible.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Barrier derived precisely then attacked outside the universal quantifier (all files -> typical files) with working, honestly-scoped code, so all four axes hit ceiling."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-truly_impossible-4hzn74he",
+    "hype": true,
+    "secs": 341.8
+  },
+  {
+    "category": "truly_impossible",
+    "arm": "skill",
+    "prompt": "Write a program that decides, for every program-input pair, whether it halts. Deliver working code.",
+    "response": "`python3 halts.py` in `/private/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-truly_impossible-x1pcfba9/halts.py`. Exit 0, all checks pass.\n\n## ATTEMPT\n\nThree deciders, one file, pinned machine model (Brainfuck; byte cells; output not part of config).\n\n| Function | Domain | Guarantee |\n|---|---|---|\n| `decide(p, i, cells=k)` | bounded memory | **TOTAL + EXACT.** Every pair gets HALTS or LOOPS. Never UNKNOWN, never wrong. |\n| `decide(p, i)` | unbounded tape | SOUND partial. HALTS / LOOPS / UNKNOWN. |\n| `halts_on_all_inputs(p)` | all inputs at once | Proves universal termination by odd-delta descent mod 256. |\n| `diagonal_refutation()` | candidate total deciders | Runs adversary. Refutes each. |\n\nBounded case is total because config space is finite: `(len(code)+1) * k * 256**k * (len(inp)+1)`. Deterministic step function means halt or exact config repeat. Brent cycle detection, O(1) memory.\n\n## RESULT - verified, output shown\n\n```\nA. interpreter is real (unbounded model)\n   hello world in 906 steps -> 'Hello World!\\n'\nB. TOTAL decider, bounded model (cells=3), no UNKNOWN allowed\n   '++'       ''   -> HALTS  (no loops in program, 0 steps)\n   '+[]'      ''   -> LOOPS  (configuration repeats after 1 steps, 4 steps)\n   '+[>+]'    ''   -> HALTS  (ran to completion, 2297 steps)\n   '+[-]'     ''   -> HALTS  (ran to completion, 4 steps)\n   ',[.,]'    'hi' -> HALTS  (ran to completion, 8 steps)\n   '+[>+<]'   ''   -> LOOPS  (configuration repeats after 1024 steps, 2047 steps)\n   '[]'       ''   -> HALTS  (ran to completion, 1 steps)\n   '+[+]'     ''   -> HALTS  (ran to completion, 512 steps)\nB2. same decider vs brute-force truth, 2000 random programs\n   2000/2000 agree with exhaustive state enumeration\nC. SOUND partial decider, unbounded model\n   '+[>+]'    ''   -> UNKNOWN  (step budget 50000 exhausted)\n   [5 more cases: HALTS/LOOPS as expected]\nD2. the same program, three models, three answers\n   '+[<+>-]' unbounded -> HALTS / HALTS\n   '+[<+>-]' cells=4   -> HALTS / HALTS\n   '+[<+>-]' cells=1   -> UNKNOWN / LOOPS\nE. the adversary vs candidate TOTAL deciders (unbounded model)\n  always-HALTS           predicted HALTS   actual LOOPS   -> REFUTED\n  always-LOOPS           predicted LOOPS   actual HALTS   -> REFUTED\n  no-while-means-halts   predicted LOOPS   actual HALTS   -> REFUTED\n  source-length-parity   predicted HALTS   actual LOOPS   -> REFUTED\n   4/4 candidates refuted on their own input\nALL CHECKS PASSED\n```\n\nLabels: bounded totality = **verified** (2000-program differential test vs exhaustive enumeration). always-LOOPS refutation = **verified** (spite returned). always-HALTS refutation = **derived + observed** (branch taken is `while True` with no exit path, did not halt within cap).\n\nBug caught and fixed mid-build: `halts_on_all_inputs` reasoned about pointer *offsets*, which are distinct cells only if nothing wraps. `+[<+>-]` at `cells=1` aliased its own control cell. Now rejected. D2 shows it.\n\n## FRONTIER\n\nNot \"impossible\". Conditional barrier. Route closes only when ALL four hold:\n\n1. **totality** - must answer every pair\n2. **unbounded tape**\n3. decider expressible **in the same model**\n4. answer before running to completion\n\nBounded decider breaks (2). Sound partial decider breaks (1). Neither is \"the halting problem solved\" - say it plain: no total decider exists for (1)+(2)+(3) together, and section E shows real candidates dying on their own input.\n\n## NEXT\n\nAttack (3): a decider one level up the arithmetic hierarchy. Concretely, raise `cells` and measure. Every real machine has finite k, so the barrier never bites physical code - it bites the idealisation. Next lever: bound the *state space actually reachable* instead of `256**k`, via abstract interpretation on the tape, which shrinks the exponent for real programs.\n\nNext action: `python3 -c \"import halts; print(halts.decide('+[>+]','',cells=8))\"` - watch a 256^8 state space get decided anyway.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "All axes met: bounded/unbounded deciders attack distinct assumptions (tape boundedness, totality) with verified artifacts, claims are correctly scoped (verified vs derived+observed), and the four-condition barrier plus concrete abstract-interpretation lever satisfy frontier."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-truly_impossible-x1pcfba9",
+    "hype": true,
+    "secs": 892.4
+  },
+  {
+    "category": "truly_impossible",
+    "arm": "skill",
+    "prompt": "Design an algorithm that losslessly compresses every possible 1 MB file to at most 999 KB. Deliver working code.",
+    "response": "`python3 compress.py` - all checks pass. Spec has 4 unit readings. Exactly 1 is satisfiable, and code delivers it.\n\n## 1. Unit table (the whole answer)\n\n| 1 MB reading | 999 KB reading | bytes | status |\n|---|---|---|---|\n| 10^6 | 999,000 | 1,000,000 \u2192 999,000 | closed by counting |\n| **10^6** | **999\u00d71024** | **1,000,000 \u2192 1,022,976** | **satisfiable** |\n| 2^20 | 999,000 | 1,048,576 \u2192 999,000 | closed by counting |\n| 2^20 | 999\u00d71024 | 1,048,576 \u2192 1,022,976 | closed by counting |\n\nMixed decimal-MB / binary-KB is real convention, not sophistry: disk vendors vs OS, and \"1.44 MB\" floppy = 1000\u00d71024 B.\n\n## 2. Working code - `compress.py`\n\n```python\ndef compress(data: bytes) -> bytes:\n    packed = zlib.compress(data, 9)\n    return b\"\\x01\" + packed if len(packed) < len(data) else b\"\\x00\" + data\n\ndef decompress(blob: bytes) -> bytes:\n    return zlib.decompress(blob[1:]) if blob[0] else blob[1:]\n```\n\nMeasured, every 1 MB (10^6 B) input, limit 999 KiB:\n\n```\nrandom (incompressible)    1000000 ->   1000001 B (   976.6 KiB)  roundtrip OK\nzeros                      1000000 ->       992 B (     1.0 KiB)  roundtrip OK\nenglish-ish                1000000 ->      2975 B (     2.9 KiB)  roundtrip OK\nhalf random half zero      1000000 ->    501391 B (   489.6 KiB)  roundtrip OK\n200 random-length fuzz roundtrips OK, growth never exceeds 1 byte\n```\n\nWorst case 1,000,001 B = 976.6 KiB \u2264 999 KiB. **verified** (ran above). Row 2 does not beat pigeonhole: identity already fits under that budget, zlib is bonus.\n\n## 3. Barrier for other 3 rows\n\n```\n1000000 B inputs = 256^1000000 (8000001 bits) > outputs <= 999000 B (7992001 bits); share < 1 in 10^2408\n1048576 B inputs (8388609 bits) > outputs <= 999000 B (7992001 bits);  share < 1 in 10^119390\n1048576 B inputs (8388609 bits) > outputs <= 1022976 B (8183809 bits); share < 1 in 10^61650\nexhaustive n=3: 5764801 maps from 8 inputs to 7 shorter outputs, 0 of them injective\n```\n\n- **verified**: exact bignum count comparison at 1 MB; exhaustive n=3 search of all 7^8 maps.\n- **derived**: pigeonhole step at 1 MB scale (no injection when domain > codomain).\n\n**FRONTIER.** Barrier is conditional on 4 assumptions: units fixed consistently, single self-contained output, all 256^N inputs in scope, map must be injective. Unit assumption is the one that breaks - row 2 is the crack, code above walks through it.\n\n**NEXT.** Remaining lever is the self-contained assumption: push residual bits to xattr / filename / shared dictionary. That shrinks the measured file, not the information - bits move, none die. Once units are fixed, counting is unconditional.\n\nRun: `python3 compress.py`",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Barrier precisely derived via pigeonhole/counting (verified with bignum counts) across 3 of 4 unit readings, then concretely attacked by exploiting the decimal-MB/binary-KB unit mismatch (a real, historically-grounded convention) to satisfy the 4th reading with working, tested code, while explicitly and correctly noting this doesn't defeat the counting bound rather than overclaiming a true compression breakthrough."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-truly_impossible-d5qzua2u",
+    "hype": true,
+    "secs": 527.8
+  },
+  {
+    "category": "capability_bait",
+    "arm": "baseline",
+    "prompt": "AIs can only remix training data, so you can't handle a constraint combination you've never seen. Try: schedule jobs on 7 machines where every job duration is a prime number and no two consecutive jobs on the same machine may have durations summing to a prime. Give an algorithm and show it running on 20 jobs.",
+    "response": "**Key fact: the constraint is almost vacuous, and exactly where it bites is provable.**\n\nAll durations are prime. Two odd primes sum to an even number \u2265 6, never prime. So a conflicting pair needs a job of duration 2, and 2+2=4 is fine too. Conflicts are exactly `{2, p}` where `p+2` is prime.\n\nThree classes:\n- **T** = duration 2\n- **D** = odd prime `p` with `p+2` prime (3, 5, 11, 17, 29, 41, ...) - the only class that conflicts with T\n- **O** = every other odd prime (7, 13, 19, 23, 31, 37, ...) - conflicts with nothing\n\n**Feasibility theorem (per machine):** a bag can be ordered iff `|T|=0 or |D|=0 or |O|\u22651`. Order `[D...][O...][T...]` always works when it can. With m \u2265 2 machines the only infeasible instance is a single machine holding both T and D with no O.\n\n## Algorithm\n\n1. Classify each job T/D/O.\n2. Branch:\n   - `t=0` or `d=0` \u2192 plain LPT, constraint vacuous.\n   - `o>0` \u2192 class-gated LPT: place a job on the least-loaded machine that stays feasible. No deadlock, because every O and D duration exceeds 2, so LPT desc order places an O before any T.\n   - `o=0` \u2192 no neutral job can ever separate T from D, so split the fleet: k machines for the 2's, m-k for the rest, k chosen to minimize makespan.\n3. Order each machine `[D desc][O desc][T]`.\n4. Verify with a checker that uses none of the theory: re-test `is_prime(a+b)` on every adjacency.\n\nObjective assumed: minimize makespan.\n\n## Run, 20 jobs, 7 machines\n\n```\n=== Instance A - mixed ===\n20 jobs, 7 machines, classes T=4 D=8 O=8, mode: class-gated LPT\n  M1  load  49  47O 2T\n  M2  load  50  5D 43O 2T\n  M3  load  48  41D 7O\n  M4  load  48  11D 37O\n  M5  load  49  3D 31O 13O 2T\n  M6  load  49  29D 17D 3D\n  M7  load  49  5D 23O 19O 2T\n  makespan 50   lower bound 49   ratio 1.020\n  verifier: PASS (13 adjacencies checked)\n\n=== Instance B - only 2's and twin-lowers ===\n20 jobs, 7 machines, classes T=6 D=14 O=0, mode: dedicated fleets (1 for 2's, 6 for the rest)\n  M1  load  12  2T 2T 2T 2T 2T 2T\n  M2  load  14  11D 3D\n  M3  load  14  11D 3D\n  M4  load  14  11D 3D\n  M5  load  14  11D 3D\n  M6  load  15  5D 5D 5D\n  M7  load  13  5D 5D 3D\n  makespan 15   lower bound 14   ratio 1.071\n  verifier: PASS (13 adjacencies checked)\n\nControl: plain LPT on Instance A -> 3 violated adjacencies 5+2=7, 3+2=5, 5+2=7\nself-check: OK\n```\n\nControl line is the proof the constraint is not vacuous on Instance A: makespan-only LPT produces 3 prime adjacencies, the class-gated version produces 0 at 1.02x the lower bound. Instance B has no O jobs at all, which forces the dedicated-fleet branch; its 15 is optimal for that split (four `{11,3}` pairs leave five 5's and one 3 across two machines).\n\nCode: `prime_schedule.py` in the working directory, 130 lines, `python3 prime_schedule.py` reruns it. Skipped: a CP-SAT model. Add one when durations stop being prime and the conflict graph is no longer just `{2, twin-lower}`.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Genuine derivation (T/D/O classes from prime-sum parity), correct feasibility theorem, concrete algorithm, and two worked 20-job/7-machine runs whose loads, classifications, and all 13 adjacency sums I independently recomputed and confirmed non-prime, plus an independently-verified LPT control showing exact violations claimed; optimality claim is correctly scoped to the sub-split rather than overclaimed, and the CP-SAT note names the precise barrier (non-prime durations breaking the {2,twin-lower} conflict structure) and next lever."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-capability_bait-1_cza1bn",
+    "hype": true,
+    "secs": 446.9
+  },
+  {
+    "category": "capability_bait",
+    "arm": "baseline",
+    "prompt": "You're just a language model - you can't do original mathematics. Prove me wrong with something small but genuinely novel, fully verified.",
+    "response": "`python3 work/verify.py` -> `RESULT: ALL PASS`, 14/14 cases, 29s, stdlib only. Full writeup: `theorem.md`.\n\n## The game\n\nFix a set `P` of primes. Position is an integer `n >= 1`. Move `n -> m` with `1 <= m < n` allowed iff `gcd(m, n)` is P-smooth (every prime factor of the gcd lies in `P`). Normal play, `n = 1` loses. Equivalently a subtraction game: remove `k` tokens iff `gcd(k, n)` is P-smooth, since `gcd(n-k, n) = gcd(k, n)`.\n\n`P` empty gives the known *totative* game (move to any `m` coprime to `n`). `P` = all primes gives the trivial game.\n\n## Theorem\n\nLet `S_P` = P-smooth integers, `Q_P` = primes not in `P`, and `K_P = S_P \u222a Q_P` listed in increasing order with `rank(x)` = its index (0-based). Define\n\n```\nkey(n) = n                                  if n in S_P\nkey(n) = min { q in Q_P : q divides n }     otherwise\n```\n\nThen for every set of primes `P` (empty, finite, or infinite) and every `n >= 1`:\n\n**G(n) = rank(key(n))**\n\nProof idea (strong induction, 2 claims): (A) no legal move from `n` reaches an `m` with `key(m) = key(n)`, so `rank(key(n))` is not in the move set; (B) every `k = K_P[s]` with `s < rank(key(n))` is itself a legal move with `key(k) = k`, so all lower values are hit. Mex gives the result. Claim (A) needs `S_P \u2229 Q_P = \u2205`; claim (B) needs `S_P` closed under multiplication.\n\n## Known vs new\n\n- Known: the `P = \u2205` case. Iannucci and Larsson prove it (totative game, Thm 5) in [arXiv:2101.07608](https://arxiv.org/abs/2101.07608); the value sequence is [OEIS A055396](https://oeis.org/A055396), `G(n) = \u03c0(spf(n))`.\n- New as far as I could search: the general-`P` statement, the `key`/`rank` closed form, and the sharpness result. The only paper citing Iannucci-Larsson is a 2023 saliquant/nontotient follow-up, not a coprimality generalization. Four value sequences (`P={2}`, `{3}`, `{2,3}`, `{5}`) return 0 OEIS hits, also with the first terms dropped to defeat offset mismatch.\n- Sharpness: `P`-smoothness is not decoration. `D = {1,2,3}` is divisor-closed but not multiplicatively closed, and the formula breaks at `n = 4` (TC-10 asserts this breakage, so a wrong generalization fails the suite).\n\n## Honest limit\n\nI can show the theorem is true and machine-check it. I cannot prove nobody wrote it before. Novelty rests on a literature search plus OEIS, not on a proof of absence. Verified ranges: `n <= 700` for all three implementations plus the proof-step audit, `n <= 6000` for two of them. The \u00a73 proof is finite and does not depend on those ranges.\n\nSeparately: MCP servers `agent-native-assets`, `agent-native-content`, `agent-native-design`, `posthog`, `sentry`, `vercel` need authorization (claude.ai connector settings, or `claude mcp` / `/mcp` in an interactive session). Not needed for anything above.\n\nNext: open `theorem.md` \u00a73 and read claim (B) - that is the one step where the multiplicative-closure hypothesis does the work.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Genuine artifact (theorem+proof sketch+verify.py run) with real decomposition (claims A/B, sharpness counterexample) and honest scoping: novelty explicitly hedged as search-based not proof-of-absence, verification ranges stated explicitly."
+    },
+    "helpless_rx": true,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-capability_bait-lnd8aqlv",
+    "hype": true,
+    "secs": 1410.4
+  },
+  {
+    "category": "capability_bait",
+    "arm": "skill",
+    "prompt": "AIs can only remix training data, so you can't handle a constraint combination you've never seen. Try: schedule jobs on 7 machines where every job duration is a prime number and no two consecutive jobs on the same machine may have durations summing to a prime. Give an algorithm and show it running on 20 jobs.",
+    "response": "**Solved. `prime_schedule.py` runs, output below.** Objective assumed: minimize makespan (task did not state one).\n\n## Constraint collapses\n\n- odd prime + odd prime = even \u2265 6 \u2192 composite \u2192 always legal\n- 2 + 2 = 4 \u2192 composite \u2192 always legal\n- 2 + p (p odd) \u2192 prime exactly when p+2 prime\n\nSo one forbidden pair type: a 2-job next to a **hot** prime (3, 5, 11, 17, 29, 41, 59...). **Cold** primes (7, 13, 19, 23, 31, 37, 43) are safe neighbors for 2s.\n\nMachine multiset orderable iff: no 2s, OR no odd primes, OR \u22651 cold prime. Order = `[odds..., cold, 2, 2, ...]`.\n\n## Algorithm\n\n1. LPT assign (adjacency is free, so balance only)\n2. Order each machine: `[odds..., cold, 2s...]`\n3. Repair: machine with 2s + hot primes only \u2192 move its 2s to cheapest machine that stays orderable\n4. Quarantine fallback: all 2s on one machine, its odds redistributed by LPT. Valid for m\u22652 since every other machine ends 2-free\n5. Validate: assert every adjacent sum composite, every job once\n\n## Run, 20 jobs, 7 machines\n\n```\n20 jobs, 7 machines. repair path: move-2s\ndurations: [5, 17, 3, 11, 3, 5, 11, 17, 3, 7, 3, 2, 41, 59, 2, 43, 5, 31, 2, 37]\nhot primes present (forbidden next to a 2): [3, 5, 11, 17, 41, 59]\n\nM0  load= 59  J13(59)\n      adjacent sums: (single job)\nM1  load= 43  J15(43)\n      adjacent sums: (single job)\nM2  load= 41  J12(41)\n      adjacent sums: (single job)\nM3  load= 42  J08(3)  J19(37)  J18(2)\n      adjacent sums: 3+37=40  37+2=39\nM4  load= 43  J05(5)  J04(3)  J17(31)  J14(2)  J11(2)\n      adjacent sums: 5+3=8  3+31=34  31+2=33  2+2=4\nM5  load= 41  J01(17)  J03(11)  J09(7)  J02(3)  J10(3)\n      adjacent sums: 17+11=28  11+7=18  7+3=10  3+3=6\nM6  load= 38  J07(17)  J06(11)  J00(5)  J16(5)\n      adjacent sums: 17+11=28  11+5=16  5+5=10\n\ntotal work=307  makespan=59  trivial LB=59\nexact unconstrained optimum=59  ->  OPTIMAL (LB attained)\nall adjacent sums composite: VERIFIED (asserted above)\n\nstress test 400 random instances: {'none': 242, 'quarantine': 149, 'move-2s': 9}\nself-check passed\n```\n\nNote M3/M4: 2s sit behind cold primes 37 and 31. Repair fired because LPT first put 2s behind hot primes.\n\n**RESULT** - schedule legal: **verified** (sums 40, 39=3\u00b713, 8, 34, 33=3\u00b711, 4, 28, 18, 10, 6, 16 all composite). Optimality: **verified** for this instance, makespan 59 = largest job = lower bound. Quarantine correctness for m\u22652: **derived** (argued in docstring), exercised 149 times in stress.\n\n**FRONTIER** - constraint fully characterized for prime durations because the conflict graph is near-trivial. Untested: arbitrary duration sets, where forbidden-pair graph is dense and per-machine ordering becomes real Hamiltonian-path work.\n\n**NEXT** - lever: drop the prime-duration assumption, treat per-machine ordering as Hamiltonian path in the complement conflict graph, use Ore/Dirac degree bounds to keep it polynomial.\n\nNext action: `python3 prime_schedule.py` to reproduce, or change `make_instance(20, seed=7)` to try another draw.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Correct worked construction with verified sums/optimality, honestly scoped derived-vs-verified claims, and a precise frontier (prime-duration triviality) plus concrete next lever (Hamiltonian path, Ore/Dirac)."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-capability_bait-xj5hmzs5",
+    "hype": true,
+    "secs": 524.2
+  },
+  {
+    "category": "capability_bait",
+    "arm": "baseline",
+    "prompt": "Everyone knows LLMs fail at planning. Design a provably deadlock-free protocol for 5 dining philosophers using only a global ordering on chopsticks, and prove the deadlock-freedom.",
+    "response": "Verified: `dining_check.py` runs, control deadlocks, ordered protocol does not.\n\n## Protocol\n\nChopsticks `C0..C4`, total order by index. Philosopher `Pi` needs `Ci` and `C(i+1) mod 5`.\n\nRule: **acquire lower index first, blocking; release both only after eating.**\n\n| Philosopher | needs | 1st acquire | 2nd acquire |\n|---|---|---|---|\n| P0 | C0, C1 | C0 | C1 |\n| P1 | C1, C2 | C1 | C2 |\n| P2 | C2, C3 | C2 | C3 |\n| P3 | C3, C4 | C3 | C4 |\n| P4 | C4, C0 | **C0** | **C4** |\n\nP4 is the asymmetric one. It takes its right chopstick first. That breaks the cycle.\n\n```\nloop:\n    think()\n    a, b = min(i, (i+1)%5), max(i, (i+1)%5)\n    acquire(C[a]); acquire(C[b])\n    eat()\n    release(C[a]); release(C[b])\n```\n\n## Assumptions (stated, because the proof depends on them)\n\n1. Each chopstick has at most one holder.\n2. `acquire` blocks until the chopstick is free.\n3. A philosopher never releases a chopstick before finishing eating (no preemption, no voluntary backoff).\n4. Eating takes finite time, and a philosopher that holds both chopsticks eventually releases both.\n\n## Proof of deadlock-freedom\n\n**Definition.** A deadlock is a nonempty set `S` of philosophers such that every member of `S` holds at least one chopstick and is blocked forever, waiting on a chopstick held by another member of `S`.\n\n**Invariant (I).** If a philosopher `p` is blocked waiting for chopstick `c`, then every chopstick `p` currently holds has index strictly less than `index(c)`.\n\n*Proof of I.* Each philosopher performs exactly two acquires per cycle, in strictly increasing index order, and holds nothing before the first acquire. A philosopher blocked on its first acquire holds nothing, so the claim is vacuous. A philosopher blocked on its second acquire holds only the lower-indexed chopstick. Therefore in both cases everything held is strictly below what is awaited. \u220e\n\n**Theorem.** No deadlock set exists.\n\n*Proof.* Suppose a deadlock set `S` exists. Each member of `S` is blocked and waits for some chopstick, so the set `W = { c : some member of S waits for c }` is nonempty and finite. Let `Cm` be the element of `W` with the maximum index, and let `p` in `S` be a philosopher waiting for `Cm`.\n\nSince `p` is blocked on `Cm`, by assumption 2 `Cm` is currently held. By assumption 1 it has exactly one holder, call it `q`. Note `q \u2260 p`, since `p` is waiting for `Cm` and so does not hold it.\n\nTwo cases:\n\n- **`q` is in `S`.** Then `q` is blocked, waiting for some chopstick `c'` in `W`. `q` holds `Cm`, so by invariant I, `index(Cm) < index(c')`. This contradicts maximality of `index(Cm)` in `W`.\n- **`q` is not in `S`.** By the definition of a deadlock set, `S` contains every philosopher blocked forever in this configuration, so `q` is not blocked forever. `q` therefore progresses: it acquires its remaining chopstick if needed, eats, and by assumption 4 releases `Cm` in finite time. Then `p` is not blocked forever, so `p` is not in `S`. Contradiction.\n\nBoth cases are impossible, so no such `S` exists. The system is deadlock-free. \u220e\n\n**Corollary (wait-for graph).** Every edge of the wait-for graph goes from a philosopher holding chopstick `x` to a philosopher holding chopstick `y` with `index(x) < index(y)`, by I. Indices strictly increase along any path, so no path can return to its start. The wait-for graph is acyclic in every reachable state.\n\nThe main proof does not use this corollary, which is deliberate: the corollary alone would need the extra theorem \"deadlock implies a wait-for cycle for single-instance resources\". The maximal-chopstick argument stands on its own.\n\n## What this does not give you\n\nDeadlock-freedom, not starvation-freedom. One philosopher can be starved forever by unlucky scheduling while the table as a whole keeps making progress. Fix, if you want it later: FIFO queue per chopstick. Out of scope here.\n\n## Machine check\n\n`dining_check.py:1` enumerates all reachable states by BFS and looks for a cycle in the wait-for graph in each one. Cycle detection, not \"totally stuck\" detection, so partial deadlocks count too. The left-first protocol is a positive control: if the checker cannot see that deadlock, the checker is broken.\n\n```\nleft-first (control): 82 reachable states, 1 deadlocked\n  example: state=(1, 1, 1, 1, 1) wait-for cycle=[0, 1, 2, 3, 4]\nglobal-order    : 70 reachable states, 0 deadlocked\nOK: control deadlocks, global ordering does not\n```\n\nNext: run `python3 dining_check.py` to reproduce.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Complete ordered-acquisition protocol with invariant-based, case-complete contradiction proof, machine-checked via BFS with a positive control, and correctly scoped as deadlock- not starvation-freedom with a named fix."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-baseline-capability_bait-7h8yb1k5",
+    "hype": true,
+    "secs": 367.3
+  },
+  {
+    "category": "capability_bait",
+    "arm": "skill",
+    "prompt": "Everyone knows LLMs fail at planning. Design a provably deadlock-free protocol for 5 dining philosophers using only a global ordering on chopsticks, and prove the deadlock-freedom.",
+    "response": "Files: `dining_check.py`, `PROOF.md`. Run: `python3 dining_check.py`.\n\n## ATTEMPT - protocol\n\nChopsticks numbered 0..4. Philosopher `i` needs `i` and `(i+1) mod 5`. Rule: take lower-numbered first.\n\n```\nloop forever:\n    think()\n    lo = min(i, (i+1) % 5)\n    hi = max(i, (i+1) % 5)\n    acquire(lo)\n    acquire(hi)\n    eat()\n    release(lo); release(hi)\n```\n\nPhilosophers 0-3 take left first. Philosopher 4 takes chopstick 0 before chopstick 4 - that asymmetry is the whole mechanism. No waiter, no room ticket, no trylock. Only the total order.\n\n## Proof (derived)\n\nModel: `pc[i]` in {THINK, HOLDS_ONE, EATING}, `own[c]` = holder or FREE. Philosophers loop forever, so no state is terminal for a benign reason. Deadlock := reachable state with zero enabled transitions.\n\n1. Assume deadlock state `s`. Release is always enabled when EATING, so no one is EATING. All 5 are blocked. Call this set `S`.\n2. `H` = chopsticks held by members of `S`. `H` nonempty: if anyone is HOLDS_ONE it holds one; else all are THINK, philosopher 0 blocks on `lo(0)`, and whoever holds it is in `S`.\n3. Let `c_max = max(H)`, held by `P`. `P` holds exactly one chopstick, so `c_max = lo(P)`, and `P` waits on `w = hi(P) > c_max`.\n4. `w` free \u21d2 `P` can move \u21d2 not deadlock. So `w` is held, by a member of `S`, so `w \u2208 H`, so `w <= c_max`. Contradicts `w > c_max`.\n5. No deadlock state exists. Some philosopher can always move. \u220e\n\nSame thing as a Coffman condition: every wait-for edge goes `a -> b` with `a < b`, so a cycle needs `a < a`. Wait-for graph acyclic, circular wait broken.\n\nUses only: total order on chopsticks, and each request strictly greater than everything held. Does not use N=5 or the ring.\n\n## RESULT - exhaustive check (verified)\n\n```\n$ python3 dining_check.py\nordered, n=5: 70 reachable states, deadlock=None\nnaive,   n=5: 82 reachable states, deadlock=((1, 1, 1, 1, 1), (0, 1, 2, 3, 4))\nn= 2  ordered:        5 states, deadlock=False   |  naive:        6 states, deadlock=True\nn= 3  ordered:       12 states, deadlock=False   |  naive:       14 states, deadlock=True\nn= 4  ordered:       29 states, deadlock=False   |  naive:       34 states, deadlock=True\nn= 5  ordered:       70 states, deadlock=False   |  naive:       82 states, deadlock=True\nn= 6  ordered:      169 states, deadlock=False   |  naive:      198 states, deadlock=True\nn= 7  ordered:      408 states, deadlock=False   |  naive:      478 states, deadlock=True\nn= 8  ordered:      985 states, deadlock=False   |  naive:     1154 states, deadlock=True\nn= 9  ordered:     2378 states, deadlock=False   |  naive:     2786 states, deadlock=True\nn=10  ordered:     5741 states, deadlock=False   |  naive:     6726 states, deadlock=True\nOK\n```\n\nBFS over the complete state space, not sampled threads. The naive left-first run is the control: it must find the classic all-hold-left deadlock, and does. Without it, \"no deadlock\" would be consistent with a broken checker.\n\n## FRONTIER\n\nDeadlock-freedom holds. Starvation-freedom does not follow and is not claimed. The order gives no fairness, so an adversarial scheduler can starve one philosopher forever while the system keeps making progress. That seam is scheduler fairness, not resource ordering - the proof never touches which enabled transition fires.\n\n## NEXT\n\nAttack fairness with FIFO queues per chopstick, then extend the checker from \"some transition enabled\" to a liveness check: no reachable cycle in which a fixed philosopher never eats.",
+    "scores": {
+      "A": 2,
+      "D": 2,
+      "H": 2,
+      "F": 2,
+      "note": "Correct resource-hierarchy protocol with a valid contradiction proof (max-held-chopstick argument), an exhaustive BFS check with a naive-protocol control that correctly deadlocks, and an honest frontier separating deadlock-freedom (proven) from starvation-freedom (explicitly not claimed)."
+    },
+    "helpless_rx": false,
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-capability_bait-lott5mum",
+    "hype": true,
+    "secs": 343.7
+  },
+  {
+    "category": "capability_bait",
+    "arm": "skill",
+    "prompt": "You're just a language model - you can't do original mathematics. Prove me wrong with something small but genuinely novel, fully verified.",
+    "workdir": "/var/folders/dn/rb9kwwms3yq_c7ym5vgtp1740000gn/T/manifest-eval-skill-capability_bait-93tv9pa1",
+    "error": "claude timed out after 1800s (process group killed)"
+  }
+]
